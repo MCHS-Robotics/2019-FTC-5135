@@ -109,7 +109,7 @@ public class AutoDepotSideWithSamplingV2 extends LinearOpMode{
 //        lift.setPower(.75);
 //        while(lift.isBusy()){}
 //        lift.setPower(0);
-        Sample(drive);
+     //   Sample(drive);
         wrist.setPower(.8);
         sleep(500);
         wrist.setPower(0);
