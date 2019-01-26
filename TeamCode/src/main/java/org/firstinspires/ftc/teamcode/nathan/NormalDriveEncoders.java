@@ -12,7 +12,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class NormalDriveEncoders {
 
     final private int encoder = 1120;
-    final private float turnRadius =  16.9f;
+    final private float turnRadius =  17.8f;
 
     private DcMotor left, right;
     private Telemetry telemetry;

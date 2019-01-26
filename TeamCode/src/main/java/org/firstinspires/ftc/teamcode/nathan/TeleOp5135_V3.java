@@ -121,7 +121,8 @@ public class TeleOp5135_V3 extends OpMode
         final double v3 = r * Math.sin(robotAngle) + rightX;
         final double v4 = r * Math.cos(robotAngle) - rightX;
 
-        frontleft.setPower(v1);
+        frontleft.
+        elsesetPower(v1);
         frontright.setPower(v2);
         backleft.setPower(v3);
         backright.setPower(v4);
@@ -130,21 +131,21 @@ public class TeleOp5135_V3 extends OpMode
         // POV Mode uses left stick to go forward, and right stick to turn.
         // - This uses basic math to combine motions and is easier to drive straight.
         double forward =  gamepad1.left_stick_y;
-        double turn  =  gamepad1.right_stick_x;
+        double turn = gamepad1.right_stick_x;
         double collect = gamepad2.left_trigger - gamepad2.right_trigger;
         double fBPower = gamepad2.right_stick_y;
         double wristPower = gamepad1.left_trigger - gamepad1.right_trigger;
         left.setPower(Range.clip(forward - turn, -1.0, 1.0));
         right.setPower(Range.clip(forward + turn, -1.0, 1.0));
-        collection.setPower(0.7*(Range.clip(collect, -1.0, 1.0)));
+        collection.setPower(0.8*(Range.clip(collect, -1.0, 1.0)));
       //  fBucket.setPower(0.5*(Range.clip(fBPower, -1.0, 1.0)))
         wrist.setPower(0.8*(Range.clip(wristPower, -1, 1)));
 
 
         if(gamepad2.left_stick_y >0.2)
-            lift.setPower(1);
-        else if(gamepad2.left_stick_y<-0.2)
             lift.setPower(-1);
+        else if(gamepad2.left_stick_y<-0.2)
+            lift.setPower(1);
         else
             lift.setPower(0);
 
@@ -155,9 +156,9 @@ public class TeleOp5135_V3 extends OpMode
 //            bucket.setPosition(0);
 
         if (gamepad2.dpad_up)
-            bucket.setPower(-.9);
+            bucket.setPower(-.8);
         else if (gamepad2.dpad_down)
-            bucket.setPower(.9);
+            bucket.setPower(.8);
         else
             bucket.setPower(0);
 

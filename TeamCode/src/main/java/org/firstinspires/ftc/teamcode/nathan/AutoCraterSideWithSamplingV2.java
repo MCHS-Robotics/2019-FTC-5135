@@ -75,7 +75,7 @@ public class AutoCraterSideWithSamplingV2 extends LinearOpMode{
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
         left.setDirection(DcMotor.Direction.REVERSE);
-        right.setDirection(DcMotor.Direction.REVERSE);
+        right.setDirection(DcMotor.Direction.FORWARD);
         //lift.setDirection(DcMotor.Direction.FORWARD);
         // fBucket.setDirection(DcMotor.Direction.FORWARD);
 
@@ -98,20 +98,12 @@ public class AutoCraterSideWithSamplingV2 extends LinearOpMode{
         right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
-        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        lift.setTargetPosition((int)(1180 * 2.9));
-        lift.setPower(.75);
-        while (lift.isBusy()){}
-        lift.setPower(0);
-        lift.setTargetPosition(0);
-        lift.setPower(.75);
-        while(lift.isBusy()){}
-        lift.setPower(0);
-
         Sample(drive);
-        extension.setTargetPosition(1180 * 3);
-        extension.setPower(.25);
-        while(extension.isBusy()){}
+        wrist.setPower(.8);
+        sleep(500);
+        wrist.setPower(0);
+        extension.setPower(-.75);
+        sleep(2000);
         extension.setPower(0);
 
         }
@@ -148,21 +140,21 @@ public class AutoCraterSideWithSamplingV2 extends LinearOpMode{
 //                            right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                             if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
                                 telemetry.addData("Gold Mineral Position", "Left");
-                                drive.pivotLeft(45);
-                                drive.forward(12);
                                 drive.pivotRight(45);
-                                drive.forward(12);
+                                drive.forward(24);
+                                drive.pivotLeft(30);
+                                drive.forward(9);
                                 path = 1;
                             } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
                                 telemetry.addData("Gold Mineral Position", "Right");
-                                drive.pivotRight(45);
-                                drive.forward(12);
                                 drive.pivotLeft(45);
-                                drive.forward(12);
+                                drive.forward(24);
+                                drive.pivotRight(30);
+                                drive.forward(9);
                                 path = 3;
                             } else {
                                 telemetry.addData("Gold Mineral Position", "Center");
-                                drive.forward(12);
+                                drive.forward(24);
                                 path = 2;
                             }
                            telemetry.update();

@@ -76,8 +76,8 @@ public class AutoDepotSideWithSamplingV2 extends LinearOpMode{
         //lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
-        left.setDirection(DcMotor.Direction.FORWARD);
-        right.setDirection(DcMotor.Direction.REVERSE);
+        left.setDirection(DcMotor.Direction.REVERSE);
+        right.setDirection(DcMotor.Direction.FORWARD);
         //lift.setDirection(DcMotor.Direction.FORWARD);
         // fBucket.setDirection(DcMotor.Direction.FORWARD);
 
@@ -113,8 +113,8 @@ public class AutoDepotSideWithSamplingV2 extends LinearOpMode{
         wrist.setPower(.8);
         sleep(500);
         wrist.setPower(0);
-        collection.setPower(.25);
-        sleep(500);
+        collection.setPower(.8);
+        sleep(1000);
         collection.setPower(0);
         switch (path) {
             case 1:
