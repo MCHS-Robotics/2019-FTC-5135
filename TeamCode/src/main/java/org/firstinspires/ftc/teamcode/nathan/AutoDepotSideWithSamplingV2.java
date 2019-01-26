@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created by student on 11/29/18.
  */
-@Autonomous(name="AutoDepotSideWithSamplingAndLatchingV2")
+//@Autonomous(name="AutoDepotSideWithSamplingAndLatchingV2")
 public class AutoDepotSideWithSamplingV2 extends LinearOpMode{
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor left = null;

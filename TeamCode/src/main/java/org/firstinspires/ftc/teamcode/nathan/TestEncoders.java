@@ -23,7 +23,7 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-        @TeleOp(name="TestEncoders", group="Iterative Opmode")
+       // @TeleOp(name="TestEncoders", group="Iterative Opmode")
 //@Disabled
         public class TestEncoders extends OpMode
         {
