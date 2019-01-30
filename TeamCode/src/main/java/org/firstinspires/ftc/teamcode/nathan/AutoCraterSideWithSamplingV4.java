@@ -20,7 +20,7 @@ import java.util.List;
  */
 @Autonomous(name="AutoCraterSideWithSamplingAndLatchingV3")
 // @Disabledl
-public class AutoCraterSideWithSamplingV3 extends LinearOpMode {
+public class AutoCraterSideWithSamplingV4 extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor left = null;
     private DcMotor right = null;
