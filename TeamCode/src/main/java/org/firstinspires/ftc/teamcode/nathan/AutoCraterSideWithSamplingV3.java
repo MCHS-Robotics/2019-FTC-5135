@@ -19,7 +19,7 @@ import java.util.List;
  * Created by student on 11/29/18.
  */
 @Autonomous(name="AutoCraterSideWithSamplingAndLatchingV3")
-// @Disabled
+// @Disabledl
 public class AutoCraterSideWithSamplingV3 extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor left = null;
