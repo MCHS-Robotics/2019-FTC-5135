@@ -102,8 +102,13 @@ public class AutoCraterSideWithSamplingV3 extends LinearOpMode {
 
         left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-
+        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        lift.setTargetPosition(1120 * 2 + 900);
+        while(lift.isBusy()) {
+            lift.setPower(.5);
+        }
+        lift.setPower(0);
         Sample(drive);
         wrist.setPower(.8);
         sleep(500);
