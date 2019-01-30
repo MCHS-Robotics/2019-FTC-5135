@@ -19,7 +19,7 @@ import java.util.List;
  * Created by student on 11/29/18.
  */
 @Autonomous(name="AutoCraterSideWithSamplingAndLatchingV3")
-@Disabled
+// @Disabled
 public class AutoCraterSideWithSamplingV3 extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor left = null;
@@ -85,16 +85,16 @@ public class AutoCraterSideWithSamplingV3 extends LinearOpMode {
         //lift.setDirection(DcMotor.Direction.FORWARD);
         // fBucket.setDirection(DcMotor.Direction.FORWARD);
 
+
         NormalDriveEncoders drive = new NormalDriveEncoders(left, right, telemetry, .3f, this);
+        if (tfod != null) {
+            /** Activate Tensor Flow Object Detection. */
+            tfod.activate();
+        }
         while(!opModeIsActive()) {
             Detect();
         }
         if (opModeIsActive()) {
-            /** Activate Tensor Flow Object Detection. */
-            if (tfod != null) {
-                tfod.activate();
-            }
-
             runtime.reset();
         }
         //
