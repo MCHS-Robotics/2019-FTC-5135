@@ -120,7 +120,7 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
                 List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                 if (updatedRecognitions != null) {
                     telemetry.addData("# Object Detected", updatedRecognitions.size());
-                    if (updatedRecognitions.size() == 2){
+                    if (updatedRecognitions.size() == 2 || updatedRecognitions.size() == 3){
                         for (Recognition recognition : updatedRecognitions) {
                             if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
                                 goldMineralX = (int) recognition.getLeft();
@@ -150,8 +150,10 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
 
 
     private void Sample(NormalDriveEncoders drive, Robot robot) {
-        //if there is only one silver mineral and the gold is on the left it must be left
-        if (silverMineral2X != silverMineral1X && goldMineralX < silverMineral1X) {
+        boolean twoMinerals = silverMineral2X == silverMineral1X;
+
+        if ((twoMinerals && goldMineralX < silverMineral1X) || (!twoMinerals && goldMineralX < silverMineral1X && goldMineralX < silverMineral2X))
+        {
             telemetry.addData("Gold Mineral Position", "Left");
             drive.pivotRight(45);
             robot.wristDown();
@@ -161,8 +163,8 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
             drive.forward(9);
             path = 1;
         }
-        //if there are no gold minerals it must be right
-        else if (goldMineralX == -1) {
+        else if ((twoMinerals && goldMineralX == -1) || (!twoMinerals && goldMineralX > silverMineral2X && goldMineralX > silverMineral1X))
+        {
             telemetry.addData("Gold Mineral Position", "Right");
             drive.pivotLeft(45);
             robot.wristDown();
@@ -173,7 +175,6 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
             drive.forward(9);
             path = 3;
         }
-        // otherwise its middle
         else {
             telemetry.addData("Gold Mineral Position", "Center");
             robot.wristDown();
