@@ -104,17 +104,27 @@ Robot robot = new Robot(lift, extension, wrist, bucket, collection);
 
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.LiftUp();
+        robot.liftUp();
         drive.forward(2);
-        robot.LiftDown();
-        robot.WristDown();
+        robot.liftDown();
+        robot.wristDown();
         Sample(drive);
-        extension.setPower(-.75);
-        sleep(2000);
-        extension.setPower(0);
+        robot.wristUp();
+        robot.extendOut();
         collection.setPower(-0.8);
         sleep(1000);
         collection.setPower(0);
+        switch(path){
+            case 1:
+                //TODO turn robot and got to crater
+                break;
+            case 2:
+                //TODO turn robot and got to crater
+                break;
+            case 3:
+                //TODO turn robot and got to crater
+                break;
+        }
 
 
     }
