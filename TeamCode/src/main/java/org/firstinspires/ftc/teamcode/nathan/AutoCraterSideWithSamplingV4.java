@@ -104,8 +104,9 @@ public class AutoCraterSideWithSamplingV4 extends LinearOpMode {
         right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.wristDown();
         robot.liftUp();
-        drive.forward(2);
+        drive.forward(4);
         robot.liftDown();
         Sample(drive,robot);
         robot.extendOut();

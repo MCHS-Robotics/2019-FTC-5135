@@ -25,9 +25,9 @@ public class Robot {
      */
     public void liftUp()
     {
-        lift.setTargetPosition(5985);
+        lift.setTargetPosition(6400);
         while(lift.isBusy()) {
-            lift.setPower(.25);
+            lift.setPower(.45);
         }
         lift.setPower(0);
     }
