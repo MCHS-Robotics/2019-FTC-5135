@@ -126,4 +126,26 @@ public class Robot {
         }
         collection.setPower(0);
     }
+
+    public void bucketUp()
+    {
+        bucket.setPower(-8);
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        bucket.setPower(0);
+    }
+
+    public void bucketDown()
+    {
+        bucket.setPower(8);
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        bucket.setPower(0);
+    }
 }
