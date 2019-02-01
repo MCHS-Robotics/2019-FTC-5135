@@ -84,6 +84,7 @@ public class TeleOp5135_V3 extends OpMode
         //telemetry.addData("lift", lift.getPower());
         telemetry.addData("collection", collection.getPower());
         //telemetry.addData("fBucket", fBucket.getPower());
+        Robot robot = new Robot(lift, extension, wrist, bucket, collection);
     }
 
     /*
@@ -195,6 +196,30 @@ public class TeleOp5135_V3 extends OpMode
      */
     @Override
     public void stop() {
+    }
+
+    /**
+     * Loads the mineral into the the rear bucket
+     * @param robot
+     */
+    public void loadMineral(Robot robot)
+    {
+        robot.extendIn();
+        robot.wristUp();
+        robot.wristDown();
+    }
+
+    public void dumpMineral(Robot robot)
+    {
+        robot.liftUp();
+        robot.bucketUp();
+        robot.liftDown();
+    }
+
+    public void preLatch(Robot robot)
+    {
+        robot.liftUp();
+        robot.bucketUp();
     }
 
 }
