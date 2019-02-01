@@ -155,7 +155,7 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
 
 
     private void Sample(NormalDriveEncoders drive, Robot robot) {
-        boolean twoSilver = silverMineral1X == silverMineral2X;
+        boolean twoSilver = silverMineral2X != -1;
         if ((twoMinerals && !twoSilver && goldMineralX < silverMineral1X) || (!twoMinerals && goldMineralX < silverMineral1X && goldMineralX < silverMineral2X))
         {
             telemetry.addData("Gold Mineral Position", "Left");
