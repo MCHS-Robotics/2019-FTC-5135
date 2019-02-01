@@ -85,7 +85,7 @@ public class AutoCraterSideWithSamplingV4 extends LinearOpMode {
         //lift.setDirection(DcMotor.Direction.FORWARD);
         // fBucket.setDirection(DcMotor.Direction.FORWARD);
 
-
+        Robot robot = new Robot(lift, extension, wrist, bucket, collection);
         NormalDriveEncoders drive = new NormalDriveEncoders(left, right, telemetry, .3f, this);
         if (tfod != null) {
             /** Activate Tensor Flow Object Detection. */
@@ -104,19 +104,12 @@ public class AutoCraterSideWithSamplingV4 extends LinearOpMode {
         right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        lift.setTargetPosition(1120 * 2 + 900);
-        while(lift.isBusy()) {
-            lift.setPower(.5);
-        }
-        lift.setPower(0);
-        Sample(drive);
-        wrist.setPower(.8);
-        sleep(500);
-        wrist.setPower(0);
-        extension.setPower(-.75);
-        sleep(2000);
-        extension.setPower(0);
-
+        robot.LiftUp();
+        drive.forward(2);
+        robot.LiftDown();
+        Sample(drive,robot);
+        robot.ExtendOut();
+        robot.WristDown();
     }
 
     private void Detect() {
@@ -155,25 +148,32 @@ public class AutoCraterSideWithSamplingV4 extends LinearOpMode {
     }
 
 
-    private void Sample(NormalDriveEncoders drive) {
+
+    private void Sample(NormalDriveEncoders drive, Robot robot) {
 
         if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
             telemetry.addData("Gold Mineral Position", "Left");
             drive.pivotRight(45);
+            robot.WristDown();
             drive.forward(24);
+            robot.WristUp();
             drive.pivotLeft(30);
             drive.forward(9);
             path = 1;
         } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
             telemetry.addData("Gold Mineral Position", "Right");
             drive.pivotLeft(45);
+            robot.WristDown();
             drive.forward(24);
+            robot.WristUp();
             drive.pivotRight(30);
             drive.forward(9);
             path = 3;
         } else {
             telemetry.addData("Gold Mineral Position", "Center");
+            robot.WristDown();
             drive.forward(24);
+            robot.WristUp();
             path = 2;
         }
         telemetry.update();
