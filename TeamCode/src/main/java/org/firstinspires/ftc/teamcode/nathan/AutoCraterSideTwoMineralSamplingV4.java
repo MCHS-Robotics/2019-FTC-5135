@@ -34,6 +34,7 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
     private int goldMineralX = -1;
     private int silverMineral1X = -1;
     private int silverMineral2X = -1;
+    private boolean twoMinerals = false;
 
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
@@ -121,6 +122,10 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
                 if (updatedRecognitions != null) {
                     telemetry.addData("# Object Detected", updatedRecognitions.size());
                     if (updatedRecognitions.size() == 2 || updatedRecognitions.size() == 3){
+                        if(updatedRecognitions.size() == 2)
+                            twoMinerals = true;
+                        else
+                            twoMinerals = false;
                         for (Recognition recognition : updatedRecognitions) {
                             if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
                                 goldMineralX = (int) recognition.getLeft();
@@ -150,9 +155,8 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
 
 
     private void Sample(NormalDriveEncoders drive, Robot robot) {
-        boolean twoMinerals = silverMineral2X == silverMineral1X;
-
-        if ((twoMinerals && goldMineralX < silverMineral1X) || (!twoMinerals && goldMineralX < silverMineral1X && goldMineralX < silverMineral2X))
+        boolean twoSilver = silverMineral1X == silverMineral2X;
+        if ((twoMinerals && !twoSilver && goldMineralX < silverMineral1X) || (!twoMinerals && goldMineralX < silverMineral1X && goldMineralX < silverMineral2X))
         {
             telemetry.addData("Gold Mineral Position", "Left");
             drive.pivotRight(45);
@@ -163,7 +167,7 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
             drive.forward(9);
             path = 1;
         }
-        else if ((twoMinerals && goldMineralX == -1) || (!twoMinerals && goldMineralX > silverMineral2X && goldMineralX > silverMineral1X))
+        else if ((twoMinerals && twoSilver) || (!twoMinerals && goldMineralX > silverMineral2X && goldMineralX > silverMineral1X))
         {
             telemetry.addData("Gold Mineral Position", "Right");
             drive.pivotLeft(45);
