@@ -4,12 +4,13 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
  * Created by student on 11/29/18.
  */
-@Autonomous(name="AutoDepotSideNoSamplingNoLatchingV2")
+//@Autonomous(name="AutoDepotSideNoSamplingNoLatchingV2")
 public class AutoDepotSideNoSamplingNoLatchingV2 extends LinearOpMode{
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor left = null;
@@ -50,7 +51,7 @@ public class AutoDepotSideNoSamplingNoLatchingV2 extends LinearOpMode{
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
         left.setDirection(DcMotor.Direction.REVERSE);
-        right.setDirection(DcMotor.Direction.REVERSE);
+        right.setDirection(DcMotor.Direction.FORWARD);
         //lift.setDirection(DcMotor.Direction.FORWARD);
         // fBucket.setDirection(DcMotor.Direction.FORWARD);
 
@@ -62,9 +63,10 @@ public class AutoDepotSideNoSamplingNoLatchingV2 extends LinearOpMode{
         right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         drive.forward(35);
         wrist.setPower(.8);
-        sleep(300);
-        collection.setPower(.7);
-        sleep(2000);
+        sleep(500);
+        wrist.setPower(0);
+        collection.setPower(.8);
+        sleep(1000);
         collection.setPower(0);
 
 
