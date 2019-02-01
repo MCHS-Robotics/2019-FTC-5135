@@ -19,7 +19,7 @@ public class Robot {
         this.collection = collection;
 
     }
-    public void LiftUp()
+    public void liftUp()
     {
         lift.setTargetPosition(1120 * 2 + 1750);
         while(lift.isBusy()) {
@@ -27,7 +27,7 @@ public class Robot {
         }
         lift.setPower(0);
     }
-    public void LiftDown()
+    public void liftDown()
     {
         lift.setTargetPosition(0);
         while(lift.isBusy()){
@@ -35,7 +35,7 @@ public class Robot {
         }
         lift.setPower(0);
     }
-    public void WristUp() {
+    public void wristUp() {
         wrist.setPower(-.8);
         try {
             Thread.sleep(500);
@@ -44,7 +44,7 @@ public class Robot {
         }
         wrist.setPower(0);
     }
-    public void WristDown() {
+    public void wristDown() {
         wrist.setPower(.8);
         try {
             Thread.sleep(500);
@@ -53,7 +53,7 @@ public class Robot {
         }
         wrist.setPower(0);
     }
-    public void ExtendOut()
+    public void extendOut()
     {
         extension.setPower(-.75);
         try {
@@ -63,7 +63,7 @@ public class Robot {
         }
         extension.setPower(0);
     }
-    public void ExtendIn()
+    public void extendIn()
     {
         extension.setPower(.75);
         try {
