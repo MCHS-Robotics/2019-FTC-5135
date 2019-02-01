@@ -19,6 +19,10 @@ public class Robot {
         this.collection = collection;
 
     }
+
+    /**
+     * Raises the lift up to unlatch the robot
+     */
     public void liftUp()
     {
         lift.setTargetPosition(1120 * 2 + 1750);
@@ -27,6 +31,10 @@ public class Robot {
         }
         lift.setPower(0);
     }
+
+    /**
+     * Lowers the lift back to starting position
+     */
     public void liftDown()
     {
         lift.setTargetPosition(0);
@@ -35,6 +43,9 @@ public class Robot {
         }
         lift.setPower(0);
     }
+    /**
+     * Raises the wrist
+     */
     public void wristUp() {
         wrist.setPower(-.8);
         try {
@@ -44,6 +55,10 @@ public class Robot {
         }
         wrist.setPower(0);
     }
+
+    /**
+     * Lowers the wrist
+     */
     public void wristDown() {
         wrist.setPower(.8);
         try {
@@ -53,6 +68,10 @@ public class Robot {
         }
         wrist.setPower(0);
     }
+
+    /**
+     * Extends the front arm
+     */
     public void extendOut()
     {
         extension.setPower(-.75);
@@ -63,6 +82,10 @@ public class Robot {
         }
         extension.setPower(0);
     }
+
+    /**
+     * Contracts the front arm
+     */
     public void extendIn()
     {
         extension.setPower(.75);
@@ -72,5 +95,35 @@ public class Robot {
             e.printStackTrace();
         }
         extension.setPower(0);
+    }
+
+    /**
+     * This method collects
+     * @param milliseconds
+     */
+    public void collectIn(int milliseconds)
+    {
+        collection.setPower(.8);
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        collection.setPower(0);
+    }
+
+    /**
+     * Unloads whatever is inside the collector
+     * @param milliseconds
+     */
+    public void collectOut(int milliseconds)
+    {
+        collection.setPower(.8);
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        collection.setPower(0);
     }
 }

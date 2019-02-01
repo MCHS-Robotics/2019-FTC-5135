@@ -92,7 +92,7 @@ public class AutoCraterSideWithSamplingV4 extends LinearOpMode {
             tfod.activate();
         }
         while(!opModeIsActive()) {
-            Detect();
+            detect();
         }
         if (opModeIsActive()) {
             runtime.reset();
@@ -112,7 +112,7 @@ public class AutoCraterSideWithSamplingV4 extends LinearOpMode {
         robot.wristDown();
     }
 
-    private void Detect() {
+    private void detect() {
         //while (opModeIsActive()) {
             if (tfod != null) {
                 // getUpdatedRecognitions() will return null if no new information is available since
@@ -154,26 +154,27 @@ public class AutoCraterSideWithSamplingV4 extends LinearOpMode {
         if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
             telemetry.addData("Gold Mineral Position", "Left");
             drive.pivotRight(45);
-            robot.WristDown();
+            robot.wristDown();
             drive.forward(24);
-            robot.WristUp();
+            robot.wristUp();
             drive.pivotLeft(30);
             drive.forward(9);
             path = 1;
         } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
             telemetry.addData("Gold Mineral Position", "Right");
             drive.pivotLeft(45);
-            robot.WristDown();
+            robot.wristDown();
             drive.forward(24);
-            robot.WristUp();
+            robot.wristUp();
+            robot.collectIn(10);
             drive.pivotRight(30);
             drive.forward(9);
             path = 3;
         } else {
             telemetry.addData("Gold Mineral Position", "Center");
-            robot.WristDown();
+            robot.wristDown();
             drive.forward(24);
-            robot.WristUp();
+            robot.wristUp();
             path = 2;
         }
         telemetry.update();
