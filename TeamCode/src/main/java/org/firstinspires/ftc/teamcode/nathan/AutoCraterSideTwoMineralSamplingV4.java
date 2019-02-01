@@ -151,7 +151,7 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
 
     private void Sample(NormalDriveEncoders drive, Robot robot) {
         //if there is only one silver mineral and the gold is on the left it must be left
-        if (silverMineral2X == -1 && goldMineralX < silverMineral1X) {
+        if (silverMineral2X != silverMineral1X && goldMineralX < silverMineral1X) {
             telemetry.addData("Gold Mineral Position", "Left");
             drive.pivotRight(45);
             robot.wristDown();
