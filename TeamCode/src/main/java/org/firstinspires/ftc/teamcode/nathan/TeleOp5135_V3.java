@@ -30,6 +30,7 @@ public class TeleOp5135_V3 extends OpMode
     private DcMotor right = null;
     private DcMotor lift = null;
     private CRServo wrist = null;
+    private boolean bucketOverride = false;
     //private DcMotor fBucket = null;
     private CRServo collection = null;
     private CRServo bucket = null;
@@ -164,9 +165,20 @@ public class TeleOp5135_V3 extends OpMode
             bucket.setPower(-.8);
         else if (gamepad2.dpad_down)
             bucket.setPower(.8);
-        else
+        else if (!bucketOverride)
             bucket.setPower(0);
 
+        //Press to keep bucket up for endgame
+        //NOTE: D-Pad will not work unless gamepad2 B is pressed to end the override
+        if(gamepad2.a) {
+            bucket.setPower(-.8);
+            bucketOverride = true;
+        }
+
+        if(gamepad2.b) {
+            bucket.setPower(0);
+            bucketOverride = false;
+        }
         if(gamepad1.right_bumper)
         {
             extension.setPower(.9);
