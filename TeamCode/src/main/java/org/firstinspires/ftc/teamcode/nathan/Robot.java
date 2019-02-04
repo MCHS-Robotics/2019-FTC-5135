@@ -11,12 +11,15 @@ public class Robot {
     private CRServo collection = null;
     private CRServo bucket = null;
     private DcMotor extension = null;
-    public Robot(DcMotor lift,  DcMotor extension, CRServo wrist, CRServo bucket, CRServo collection) {
+    private NormalDriveEncoders drive = null;
+    public Robot(DcMotor lift,  DcMotor extension, CRServo wrist, CRServo bucket,
+                 CRServo collection, NormalDriveEncoders drive) {
         this.lift = lift;
         this.extension = extension;
         this.wrist = wrist;
         this.bucket = bucket;
         this.collection = collection;
+        this.drive = drive;
 
     }
 
@@ -54,6 +57,18 @@ public class Robot {
             e.printStackTrace();
         }
         wrist.setPower(0);
+    }
+
+    public void forward(float inches) {
+        drive.forward(inches);
+    }
+
+    public void pivotLeft(float degrees){
+        drive.pivotLeft(degrees);
+    }
+
+    public void pivotRight(float degrees){
+        drive.pivotRight(degrees);
     }
 
     /**

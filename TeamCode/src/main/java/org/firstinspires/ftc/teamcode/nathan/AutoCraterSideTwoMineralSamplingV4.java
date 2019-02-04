@@ -85,8 +85,8 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
         //lift.setDirection(DcMotor.Direction.FORWARD);
         // fBucket.setDirection(DcMotor.Direction.FORWARD);
 
-        Robot robot = new Robot(lift, extension, wrist, bucket, collection);
         NormalDriveEncoders drive = new NormalDriveEncoders(left, right, telemetry, .3f, this);
+        Robot robot = new Robot(lift, extension, wrist, bucket, collection, drive);
         if (tfod != null) {
             /** Activate Tensor Flow Object Detection. */
             tfod.activate();
@@ -97,8 +97,6 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
         if (opModeIsActive()) {
             runtime.reset();
         }
-        //
-
 
         left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -106,7 +104,7 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
         lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.wristDown();
         robot.liftUp();
-        drive.forward(4);
+        robot.forward(4);
         robot.liftDown();
         Sample(drive,robot);
         robot.extendOut();
@@ -114,7 +112,6 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
     }
 
     private void detect() {
-        //while (opModeIsActive()) {
             if (tfod != null) {
                 // getUpdatedRecognitions() will return null if no new information is available since
                 // the last time that call was made.
@@ -135,12 +132,10 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
                                 silverMineral2X = (int) recognition.getLeft();
                             }
                         }
-
                         telemetry.addData("GoldX", goldMineralX);
                         telemetry.addData("Silver1X", silverMineral1X);
                         telemetry.addData("Silver2X", silverMineral2X);
                         telemetry.update();
-
                     }
                     else {
                         goldMineralX = -1;
@@ -156,7 +151,8 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
 
     private void Sample(NormalDriveEncoders drive, Robot robot) {
         boolean twoSilver = silverMineral2X != -1;
-        if ((twoMinerals && !twoSilver && goldMineralX < silverMineral1X) || (!twoMinerals && goldMineralX < silverMineral1X && goldMineralX < silverMineral2X))
+        if ((twoMinerals && !twoSilver && goldMineralX < silverMineral1X)
+        || (!twoMinerals && goldMineralX < silverMineral1X && goldMineralX < silverMineral2X))
         {
             telemetry.addData("Gold Mineral Position", "Left");
             drive.pivotRight(45);
@@ -167,7 +163,8 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
             drive.forward(9);
             path = 1;
         }
-        else if ((twoMinerals && twoSilver) || (!twoMinerals && goldMineralX > silverMineral2X && goldMineralX > silverMineral1X))
+        else if ((twoMinerals && twoSilver)
+        || (!twoMinerals && goldMineralX > silverMineral2X && goldMineralX > silverMineral1X))
         {
             telemetry.addData("Gold Mineral Position", "Right");
             drive.pivotLeft(45);

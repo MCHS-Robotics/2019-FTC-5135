@@ -85,7 +85,7 @@ public class TeleOp5135_V3 extends OpMode
         //telemetry.addData("lift", lift.getPower());
         telemetry.addData("collection", collection.getPower());
         //telemetry.addData("fBucket", fBucket.getPower());
-        Robot robot = new Robot(lift, extension, wrist, bucket, collection);
+        //Robot robot = new Robot(lift, extension, wrist, bucket, collection, drive);
     }
 
     /*
@@ -108,30 +108,7 @@ public class TeleOp5135_V3 extends OpMode
      */
     @Override
     public void loop() {
-        // Setup a variable for each drive wheel to save power level for telemetry
-        //double leftPower;
-        //double rightPower;
 
-        // Choose to drive using either Tank Mode, or POV Mode
-        // Choose to drive using either Tank Mode, or POV Mode
-        // Comment out the method that's not used.  The default below is POV.
-        /*double r = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
-        double robotAngle = Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4;
-        double rightX = gamepad1.right_stick_x;
-        final double v1 = r * Math.cos(robotAngle) + rightX;
-        final double v2 = r * Math.sin(robotAngle) - rightX;
-        final double v3 = r * Math.sin(robotAngle) + rightX;
-        final double v4 = r * Math.cos(robotAngle) - rightX;
-
-        frontleft.
-        elsesetPower(v1);
-        frontright.setPower(v2);
-        backleft.setPower(v3);
-        backright.setPower(v4);
-        */
-
-        // POV Mode uses left stick to go forward, and right stick to turn.
-        // - This uses basic math to combine motions and is easier to drive straight.
         double forward =  gamepad1.left_stick_y;
         double turn = gamepad1.right_stick_x;
         double collect = gamepad2.left_trigger - gamepad2.right_trigger;
@@ -156,11 +133,6 @@ public class TeleOp5135_V3 extends OpMode
             lift.setPower(0);
 
 
-//        if (gamepad2.a)
-//            bucket.setPosition(2);
-//        if (gamepad2.b)
-//            bucket.setPosition(0);
-
         if (gamepad2.dpad_up)
             bucket.setPower(-.8);
         else if (gamepad2.dpad_down)
@@ -171,7 +143,7 @@ public class TeleOp5135_V3 extends OpMode
         //Press to keep bucket up for endgame
         //NOTE: D-Pad will not work unless gamepad2 B is pressed to end the override
         if(gamepad2.a) {
-            bucket.setPower(-.8);
+            bucket.setPower(-.4);
             bucketOverride = true;
         }
 
@@ -189,17 +161,6 @@ public class TeleOp5135_V3 extends OpMode
         }
         else extension.setPower(0);
 
-
-        // Tank Mode uses one stick to control each wheel.
-        // - This requires no math, but it is hard to drive forward slowly and keep straight.
-        // leftPower  = -gamepad1.left_stick_y ;
-        // rightPower = -gamepad1.right_stick_y ;
-
-
-        // Show the elapsed game time and wheel power.
-//        telemetry.addData("Status", "Run Time: " + runtime.toString());
-//        telemetry.addData("Motors", "left (%.2f), right (%.2f)");
-     //   telemetry.addData("Lift Encoder", lift.getCurrentPosition());
         telemetry.update();
     }
 
@@ -214,24 +175,24 @@ public class TeleOp5135_V3 extends OpMode
      * Loads the mineral into the the rear bucket
      * @param robot
      */
-    public void loadMineral(Robot robot)
-    {
-        robot.extendIn();
-        robot.wristUp();
-        robot.wristDown();
-    }
-
-    public void dumpMineral(Robot robot)
-    {
-        robot.liftUp();
-        robot.bucketUp();
-        robot.liftDown();
-    }
-
-    public void preLatch(Robot robot)
-    {
-        robot.liftUp();
-        robot.bucketUp();
-    }
+//    public void loadMineral(Robot robot)
+//    {
+//        robot.extendIn();
+//        robot.wristUp();
+//        robot.wristDown();
+//    }
+//
+//    public void dumpMineral(Robot robot)
+//    {
+//        robot.liftUp();
+//        robot.bucketUp();
+//        robot.liftDown();
+//    }
+//
+//    public void preLatch(Robot robot)
+//    {
+//        robot.liftUp();
+//        robot.bucketUp();
+//    }
 
 }
