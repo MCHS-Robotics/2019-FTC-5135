@@ -142,15 +142,16 @@ public class TeleOp5135_V3 extends OpMode
 
         //Press to keep bucket up for endgame
         //NOTE: D-Pad will not work unless gamepad2 B is pressed to end the override
-        if(gamepad2.a) {
+        if(gamepad2.a && bucketOverride == false) {
             bucket.setPower(-.4);
             bucketOverride = true;
         }
-
-        if(gamepad2.b) {
+        else if (gamepad2.a && bucketOverride == true)
+        {
             bucket.setPower(0);
             bucketOverride = false;
         }
+
         if(gamepad1.right_bumper)
         {
             extension.setPower(.9);
