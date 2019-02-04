@@ -114,16 +114,20 @@ public class TeleOp5135_V3 extends OpMode
         double collect = gamepad2.left_trigger - gamepad2.right_trigger;
         double fBPower = gamepad2.right_stick_y;
         double wristPower = gamepad1.left_trigger - gamepad1.right_trigger;
+
         if(forward > 0)
             forward = Math.pow(forward, 1.8);
         else if(forward < 0)
             forward = -Math.pow(forward, 1.8);
+        if(turn > 0)
+            turn = Math.pow(forward, 1.8);
+        else if(turn < 0)
+            turn = -Math.pow(forward, 1.8);
+
         left.setPower(Range.clip(forward - turn, -1, 1));
         right.setPower(Range.clip(forward + turn, -1, 1));
         collection.setPower(0.8*(Range.clip(collect, -1.0, 1.0)));
-      //  fBucket.setPower(0.5*(Range.clip(fBPower, -1.0, 1.0)))
         wrist.setPower(0.8*(Range.clip(wristPower, -1, 1)));
-
 
         if(gamepad2.left_stick_y >0.2)
             lift.setPower(-1);
@@ -131,7 +135,6 @@ public class TeleOp5135_V3 extends OpMode
             lift.setPower(1);
         else
             lift.setPower(0);
-
 
         if (gamepad2.dpad_up)
             bucket.setPower(-.8);
