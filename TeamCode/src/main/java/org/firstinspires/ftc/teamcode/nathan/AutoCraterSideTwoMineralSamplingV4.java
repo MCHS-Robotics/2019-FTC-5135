@@ -17,8 +17,9 @@ import java.util.List;
 /**
  * Created by student on 11/29/18.
  */
-@Autonomous(name="AutoCraterSideWithSamplingAndLatchingV2")
-public class AutoCraterSideWithSamplingV2 extends LinearOpMode{
+@Autonomous(name="AutoCraterSideTwoMineralSamplingV4")
+// @Disabledl
+public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor left = null;
     private DcMotor right = null;
@@ -30,6 +31,10 @@ public class AutoCraterSideWithSamplingV2 extends LinearOpMode{
     private DcMotor extension = null;
     //path 1 = left - path 2 = middle - path 3 = right
     private int path = -1;
+    private int goldMineralX = -1;
+    private int silverMineral1X = -1;
+    private int silverMineral2X = -1;
+    private boolean twoMinerals = false;
 
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
@@ -38,6 +43,7 @@ public class AutoCraterSideWithSamplingV2 extends LinearOpMode{
 
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
+
     @Override
     public void runOpMode() {
         initVuforia();
@@ -80,50 +86,43 @@ public class AutoCraterSideWithSamplingV2 extends LinearOpMode{
         // fBucket.setDirection(DcMotor.Direction.FORWARD);
 
         NormalDriveEncoders drive = new NormalDriveEncoders(left, right, telemetry, .3f, this);
-
-        waitForStart();
-        if (opModeIsActive()) {
+        Robot robot = new Robot(lift, extension, wrist, bucket, collection, drive);
+        if (tfod != null) {
             /** Activate Tensor Flow Object Detection. */
-            if (tfod != null) {
-                tfod.activate();
-            }
-
+            tfod.activate();
+        }
+        while(!opModeIsActive()) {
+            detect();
+        }
+        if (opModeIsActive()) {
             runtime.reset();
         }
-        //
-
-
 
         left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.wristDown();
+        robot.liftUp();
+        robot.forward(4);
+        robot.liftDown();
+        Sample(drive,robot);
+        robot.extendOut();
+        robot.wristDown();
+    }
 
-
-        Sample(drive);
-        extension.setPower(-1);
-        sleep(2000);
-        extension.setPower(0);
-        wrist.setPower(.8);
-        sleep(700);
-        wrist.setPower(0);
-//        collection.setPower(.8);
-//        sleep(2000);
-//        collection.setPower(0);
-        }
-
-
-    private void Sample(NormalDriveEncoders drive)
-    {
-        while (opModeIsActive()) {
+    private void detect() {
             if (tfod != null) {
                 // getUpdatedRecognitions() will return null if no new information is available since
                 // the last time that call was made.
                 List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                 if (updatedRecognitions != null) {
                     telemetry.addData("# Object Detected", updatedRecognitions.size());
-                    if (updatedRecognitions.size() == 3) {
-                        int goldMineralX = -1;
-                        int silverMineral1X = -1;
-                        int silverMineral2X = -1;
+                    if (updatedRecognitions.size() == 2 || updatedRecognitions.size() == 3){
+                        if(updatedRecognitions.size() == 2)
+                            twoMinerals = true;
+                        else
+                            twoMinerals = false;
                         for (Recognition recognition : updatedRecognitions) {
                             if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
                                 goldMineralX = (int) recognition.getLeft();
@@ -137,35 +136,55 @@ public class AutoCraterSideWithSamplingV2 extends LinearOpMode{
                         telemetry.addData("Silver1X", silverMineral1X);
                         telemetry.addData("Silver2X", silverMineral2X);
                         telemetry.update();
-//                           telemetry.addData("Silver1X", "Initialized");     if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
-//                           telemetry.addData("Silver2X", "Initialized");         left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//                            right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                            if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
-                                telemetry.addData("Gold Mineral Position", "Left");
-                                drive.pivotRight(45);
-                                drive.forward(24);
-                                drive.pivotLeft(25);
-                                drive.forward(9);
-                                path = 1;
-                            } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
-                                telemetry.addData("Gold Mineral Position", "Right");
-                                drive.pivotLeft(45);
-                                drive.forward(24);
-                                drive.pivotRight(25);
-                                drive.forward(9);
-                                path = 3;
-                            } else {
-                                telemetry.addData("Gold Mineral Position", "Center");
-                                drive.forward(24);
-                                path = 2;
-                            }
-                           telemetry.update();
-                           break;
-                        }
+                    }
+                    else {
+                        goldMineralX = -1;
+                        silverMineral1X = -1;
+                        silverMineral2X = -1;
                     }
                 }
             }
+        //}
+    }
+
+
+
+    private void Sample(NormalDriveEncoders drive, Robot robot) {
+        boolean twoSilver = silverMineral2X != -1;
+        if ((twoMinerals && !twoSilver && goldMineralX < silverMineral1X)
+        || (!twoMinerals && goldMineralX < silverMineral1X && goldMineralX < silverMineral2X))
+        {
+            telemetry.addData("Gold Mineral Position", "Left");
+            drive.pivotRight(45);
+            robot.wristDown();
+            drive.forward(24);
+            robot.wristUp();
+            drive.pivotLeft(30);
+            drive.forward(9);
+            path = 1;
         }
+        else if ((twoMinerals && twoSilver)
+        || (!twoMinerals && goldMineralX > silverMineral2X && goldMineralX > silverMineral1X))
+        {
+            telemetry.addData("Gold Mineral Position", "Right");
+            drive.pivotLeft(45);
+            robot.wristDown();
+            drive.forward(24);
+            robot.wristUp();
+            robot.collectIn(10);
+            drive.pivotRight(30);
+            drive.forward(9);
+            path = 3;
+        }
+        else {
+            telemetry.addData("Gold Mineral Position", "Center");
+            robot.wristDown();
+            drive.forward(24);
+            robot.wristUp();
+            path = 2;
+        }
+        telemetry.update();
+    }
 
     private void initVuforia() {
         /*
