@@ -118,11 +118,11 @@ public class TeleOp5135_V3 extends OpMode
         if(forward > 0)
             forward = Math.pow(forward, 1.8);
         else if(forward < 0)
-            forward = -Math.pow(forward, 1.8);
+            forward = Math.pow(forward, 1.8);
         if(turn > 0)
             turn = Math.pow(turn, 1.8);
         else if(turn < 0)
-            turn = -Math.pow(turn, 1.8);
+            turn = Math.pow(turn, 1.8);
 
         left.setPower(Range.clip(forward - turn, -1, 1));
         right.setPower(Range.clip(forward + turn, -1, 1));
