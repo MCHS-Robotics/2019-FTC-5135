@@ -105,7 +105,7 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
         Sample(drive,robot);
         telemetry.update();
         robot.extendOut();
-        robot.wristDown();
+        robot.liftDown();
     }
 
     private void detect() {
@@ -164,9 +164,9 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
             telemetry.addData("Gold Mineral Position", "Left");
             telemetry.update();
             drive.pivotLeft(35);
-            drive.forward(20);
+            drive.forward(24);
             drive.pivotRight(35);
-            drive.forward(9);
+            drive.forward(8);
             path = 1;
         }
         else if ((twoMinerals && twoSilver)
@@ -175,10 +175,10 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
             telemetry.addData("Gold Mineral Position", "Right");
             telemetry.update();
             drive.pivotRight(35);
-            drive.forward(20);
+            drive.forward(24);
             robot.collectIn(10);
             drive.pivotLeft(35);
-            drive.forward(9);
+            drive.forward(8);
             path = 3;
         }
         else {

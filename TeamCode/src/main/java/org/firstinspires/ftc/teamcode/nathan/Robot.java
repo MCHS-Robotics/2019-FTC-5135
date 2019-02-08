@@ -142,22 +142,22 @@ public class Robot {
         collection.setPower(0);
     }
 
-    public void bucketUp()
+    public void bucketDown()
     {
         bucket.setPower(-8);
         try {
-            Thread.sleep(500);
+            Thread.sleep(600);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         bucket.setPower(0);
     }
 
-    public void bucketDown()
+    public void bucketUp()
     {
         bucket.setPower(8);
         try {
-            Thread.sleep(500);
+            Thread.sleep(600);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
