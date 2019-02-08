@@ -6,20 +6,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-/**
- * This file contains an example of an iterative (Non-Linear) "OpMode".
- * An OpMode is a 'program' that runs in either the autonomous or the teleop period of an FTC match.
- * The names of OpModes appear on the menu of the FTC Driver Station.
- * When an selection is made from the menu, the corresponding OpMode
- * class is instantiated on the Robot Controller and executed.
- *
- * This particular OpMode just executes a basic Tank Drive Teleop for a two wheeled robot
- * It includes all the skeletal structure that all iterative OpModes contain.
- *
- * Use Android Studios to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
- */
-
 @TeleOp(name="TeleOp5135_V3", group="Iterative Opmode")
 //@Disabled
 public class TeleOp5135_V3 extends OpMode
@@ -119,11 +105,12 @@ public class TeleOp5135_V3 extends OpMode
             forward = Math.pow(forward, 2);
         else if(forward < 0)
             forward = -Math.pow(forward, 2);
-        if(turn > 0)
-            turn = Math.pow(turn, 2);
-        else if(turn < 0)
-            turn = -Math.pow(turn, 2);
 
+        turn = Math.pow(turn, 3);
+//        else if(turn < 0)
+//            turn = -Math.pow(turn, 2);
+        telemetry.addData("Forward Power", forward);
+        telemetry.addData("Turn Power", turn);
         left.setPower(Range.clip(forward - turn, -1, 1));
         right.setPower(Range.clip(forward + turn, -1, 1));
         collection.setPower(0.8*(Range.clip(collect, -1.0, 1.0)));

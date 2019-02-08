@@ -103,17 +103,6 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
         robot.liftUp();
         robot.forward(4);
         Sample(drive,robot);
-        switch(path){
-            case 1:
-                telemetry.addData("Gold Mineral Position", "Left");
-                break;
-            case 2:
-                telemetry.addData("Gold Mineral Position", "Middle");
-                break;
-            case 3:
-                telemetry.addData("Gold Mineral Position", "Right");
-                break;
-        }
         telemetry.update();
         robot.extendOut();
         robot.wristDown();
@@ -174,9 +163,9 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
         {
             telemetry.addData("Gold Mineral Position", "Left");
             telemetry.update();
-            drive.pivotRight(35);
-            drive.forward(24);
             drive.pivotLeft(35);
+            drive.forward(20);
+            drive.pivotRight(35);
             drive.forward(9);
             path = 1;
         }
@@ -185,17 +174,17 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
         {
             telemetry.addData("Gold Mineral Position", "Right");
             telemetry.update();
-            drive.pivotLeft(35);
-            drive.forward(24);
-            robot.collectIn(10);
             drive.pivotRight(35);
+            drive.forward(20);
+            robot.collectIn(10);
+            drive.pivotLeft(35);
             drive.forward(9);
             path = 3;
         }
         else {
             telemetry.addData("Gold Mineral Position", "Center");
             telemetry.update();
-            drive.forward(24);
+            drive.forward(22);
             path = 2;
         }
         telemetry.update();

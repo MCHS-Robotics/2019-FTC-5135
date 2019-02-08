@@ -30,7 +30,7 @@ public class Robot {
     {
         lift.setTargetPosition(7100);
         while(lift.isBusy()) {
-            lift.setPower(.45);
+            lift.setPower(.65);
         }
         lift.setPower(0);
     }
