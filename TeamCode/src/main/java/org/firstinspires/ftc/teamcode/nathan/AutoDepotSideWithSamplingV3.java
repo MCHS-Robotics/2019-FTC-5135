@@ -34,7 +34,8 @@ public class AutoDepotSideWithSamplingV3 extends LinearOpMode {
     private int goldMineralX = -1;
     private int silverMineral1X = -1;
     private int silverMineral2X = -1;
-
+    private boolean twoMinerals = false;
+    private boolean twoSilver = false;
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
@@ -42,6 +43,7 @@ public class AutoDepotSideWithSamplingV3 extends LinearOpMode {
 
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
+
 
     @Override
     public void runOpMode() {
@@ -92,7 +94,7 @@ public class AutoDepotSideWithSamplingV3 extends LinearOpMode {
             tfod.activate();
         }
         while(!opModeIsActive()) {
-            Detect();
+            detect();
         }
         if (opModeIsActive()) {
             runtime.reset();
@@ -111,7 +113,7 @@ public class AutoDepotSideWithSamplingV3 extends LinearOpMode {
         drive.forward(2);
         //robot.liftDown()
         robot.wristUp();
-        Sample(drive);
+        Sample(drive, robot);
 
         //robot.extendOut();
         //collection.setPower(0.8);
@@ -143,63 +145,83 @@ public class AutoDepotSideWithSamplingV3 extends LinearOpMode {
 
     }
 
-    private void Detect() {
-        //while (opModeIsActive()) {
-            if (tfod != null) {
-                // getUpdatedRecognitions() will return null if no new information is available since
-                // the last time that call was made.
-                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                if (updatedRecognitions != null) {
-                    telemetry.addData("# Object Detected", updatedRecognitions.size());
-                    if (updatedRecognitions.size() == 3|| updatedRecognitions.size() == 2){
+
+    private void detect() {
+        if (tfod != null) {
+            // getUpdatedRecognitions() will return null if no new information is available since
+            // the last time that call was made.
+            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+            if (updatedRecognitions != null) {
+                telemetry.addData("# Object Detected", updatedRecognitions.size());
+                if (updatedRecognitions.size() == 2 || updatedRecognitions.size() == 3){
+                    if(updatedRecognitions.size() == 2)
+                        twoMinerals = true;
+                    else
+                        twoMinerals = false;
+                    twoSilver = twoMinerals;
+                    if(twoMinerals) {
                         for (Recognition recognition : updatedRecognitions) {
-                            if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                                goldMineralX = (int) recognition.getLeft();
-                            } else if (silverMineral1X == -1) {
-                                silverMineral1X = (int) recognition.getLeft();
-                            } else {
-                                silverMineral2X = (int) recognition.getLeft();
-                            }
+                            if (recognition.getLabel().equals((LABEL_GOLD_MINERAL)))
+                                twoSilver = false;
                         }
-
-                        telemetry.addData("GoldX", goldMineralX);
-                        telemetry.addData("Silver1X", silverMineral1X);
-                        telemetry.addData("Silver2X", silverMineral2X);
-                        telemetry.update();
-
                     }
-                    else {
-                        goldMineralX = -1;
-                        silverMineral1X = -1;
-                        silverMineral2X = -1;
+                    for (Recognition recognition : updatedRecognitions) {
+                        if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                            goldMineralX = (int) recognition.getLeft();
+
+                        } else if (silverMineral1X == -1) {
+                            silverMineral1X = (int) recognition.getLeft();
+                        }
+                        else{
+                            silverMineral2X = (int) recognition.getLeft();
+                        }
                     }
+
+
+                    telemetry.addData("GoldX", goldMineralX);
+                    telemetry.addData("Silver1X", silverMineral1X);
+                    telemetry.addData("Silver2X", silverMineral2X);
+                    telemetry.update();
+                }
+                else {
+                    goldMineralX = -1;
+                    silverMineral1X = -1;
+                    silverMineral2X = -1;
                 }
             }
-        //}
+        }
     }
 
 
-    private void Sample(NormalDriveEncoders drive) {
-
-        if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
+    private void Sample(NormalDriveEncoders drive, Robot robot) {
+//        boolean twoSilver = Math.abs(silverMineral1X - silverMineral2X) < 15;
+        if ((twoMinerals && !twoSilver && goldMineralX < silverMineral1X)
+                || (!twoMinerals && goldMineralX < silverMineral1X && goldMineralX < silverMineral2X))
+        {
             telemetry.addData("Gold Mineral Position", "Left");
-            drive.pivotLeft(45);
-            drive.forward(24);
-            drive.pivotRight(30);
+            telemetry.update();
+            drive.pivotLeft(35);
+            drive.forward(20);
+            drive.pivotRight(35);
             drive.forward(9);
-
             path = 1;
-
-        } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
+        }
+        else if ((twoMinerals && twoSilver)
+                || (!twoMinerals && goldMineralX > silverMineral2X && goldMineralX > silverMineral1X))
+        {
             telemetry.addData("Gold Mineral Position", "Right");
-            drive.pivotRight(45);
-            drive.forward(24);
-            drive.pivotLeft(45);
+            telemetry.update();
+            drive.pivotRight(35);
+            drive.forward(20);
+            robot.collectIn(10);
+            drive.pivotLeft(35);
             drive.forward(9);
             path = 3;
-        } else {
+        }
+        else {
             telemetry.addData("Gold Mineral Position", "Center");
-            drive.forward(24);
+            telemetry.update();
+            drive.forward(22);
             path = 2;
         }
         telemetry.update();
