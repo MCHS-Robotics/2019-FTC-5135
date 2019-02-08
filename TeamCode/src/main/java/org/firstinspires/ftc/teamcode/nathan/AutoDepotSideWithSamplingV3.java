@@ -183,18 +183,18 @@ public class AutoDepotSideWithSamplingV3 extends LinearOpMode {
 
         if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
             telemetry.addData("Gold Mineral Position", "Left");
-            drive.pivotRight(45);
+            drive.pivotLeft(45);
             drive.forward(24);
-            drive.pivotLeft(30);
+            drive.pivotRight(30);
             drive.forward(9);
 
             path = 1;
 
         } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
             telemetry.addData("Gold Mineral Position", "Right");
-            drive.pivotLeft(45);
-            drive.forward(24);
             drive.pivotRight(45);
+            drive.forward(24);
+            drive.pivotLeft(45);
             drive.forward(9);
             path = 3;
         } else {
