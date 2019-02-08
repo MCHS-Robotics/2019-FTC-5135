@@ -13,12 +13,13 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
+import java.util.zip.GZIPOutputStream;
 
 /**
  * Created by student on 11/29/18.
  */
 @Autonomous(name="AutoCraterSideTwoMineralSamplingV4")
-// @Disabledl
+// @Disabled
 public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor left = null;
@@ -35,7 +36,7 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
     private int silverMineral1X = -1;
     private int silverMineral2X = -1;
     private boolean twoMinerals = false;
-
+    private boolean twoSilver = false;
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
@@ -53,10 +54,6 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
         } else {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
         }
-        telemetry.addData("Status", "Initialized");
-
-        telemetry.addData("Status", "Initialized");
-
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
@@ -134,15 +131,26 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
                             twoMinerals = true;
                         else
                             twoMinerals = false;
+                        twoSilver = twoMinerals;
+                        if(twoMinerals) {
+                            for (Recognition recognition : updatedRecognitions) {
+                                if (recognition.getLabel().equals((LABEL_GOLD_MINERAL)))
+                                    twoSilver = false;
+                            }
+                        }
                         for (Recognition recognition : updatedRecognitions) {
                             if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
                                 goldMineralX = (int) recognition.getLeft();
+
                             } else if (silverMineral1X == -1) {
                                 silverMineral1X = (int) recognition.getLeft();
-                            } else {
+                            }
+                            else{
                                 silverMineral2X = (int) recognition.getLeft();
                             }
                         }
+
+
                         telemetry.addData("GoldX", goldMineralX);
                         telemetry.addData("Silver1X", silverMineral1X);
                         telemetry.addData("Silver2X", silverMineral2X);
@@ -155,21 +163,20 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
                     }
                 }
             }
-        //}
     }
 
 
 
     private void Sample(NormalDriveEncoders drive, Robot robot) {
-        boolean twoSilver = Math.abs(silverMineral1X - silverMineral2X) < 15;
+//        boolean twoSilver = Math.abs(silverMineral1X - silverMineral2X) < 15;
         if ((twoMinerals && !twoSilver && goldMineralX < silverMineral1X)
         || (!twoMinerals && goldMineralX < silverMineral1X && goldMineralX < silverMineral2X))
         {
             telemetry.addData("Gold Mineral Position", "Left");
             telemetry.update();
-            drive.pivotRight(45);
+            drive.pivotRight(35);
             drive.forward(24);
-            drive.pivotLeft(30);
+            drive.pivotLeft(35);
             drive.forward(9);
             path = 1;
         }
@@ -178,10 +185,10 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
         {
             telemetry.addData("Gold Mineral Position", "Right");
             telemetry.update();
-            drive.pivotLeft(45);
+            drive.pivotLeft(35);
             drive.forward(24);
             robot.collectIn(10);
-            drive.pivotRight(30);
+            drive.pivotRight(35);
             drive.forward(9);
             path = 3;
         }

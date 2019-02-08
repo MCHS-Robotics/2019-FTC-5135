@@ -108,7 +108,6 @@ public class AutoCraterSideWithSamplingV4 extends LinearOpMode {
         robot.wristDown();
         robot.liftUp();
         drive.forward(4);
-        robot.liftDown();
         Sample(drive,robot);
         robot.extendOut();
         robot.wristDown();
