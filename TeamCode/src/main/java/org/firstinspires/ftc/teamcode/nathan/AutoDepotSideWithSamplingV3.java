@@ -105,27 +105,29 @@ public class AutoDepotSideWithSamplingV3 extends LinearOpMode {
 
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        robot.wristDown();
         robot.liftUp();
         drive.forward(2);
-        robot.liftDown();
-        robot.wristDown();
+        //robot.liftDown()
         Sample(drive);
         robot.wristUp();
         robot.extendOut();
-        collection.setPower(-0.8);
+        collection.setPower(0.8);
         sleep(1000);
         collection.setPower(0);
-        switch(path){
-            case 1:
+
+        //switch(path){
+            //case 1:
                 //TODO turn robot and got to crater
-                break;
-            case 2:
+                //break;
+            //case 2:
                 //TODO turn robot and got to crater
-                break;
-            case 3:
+                //break;
+            //case 3:
                 //TODO turn robot and got to crater
-                break;
-        }
+                //break;
+        //}
 
 
     }
