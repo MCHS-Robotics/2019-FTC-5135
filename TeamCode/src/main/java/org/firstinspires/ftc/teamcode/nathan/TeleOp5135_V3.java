@@ -123,11 +123,11 @@ public class TeleOp5135_V3 extends OpMode
         else
             lift.setPower(0);
 
-        if (gamepad2.dpad_up)
+        if (gamepad2.dpad_up || gamepad2.right_stick_y > 0)
             bucket.setPower(-.8);
-        else if (gamepad2.dpad_down)
+        else if (gamepad2.dpad_down || gamepad2.right_stick_y < 0)
             bucket.setPower(.8);
-        else if (!bucketOverride)
+        else
             bucket.setPower(0);
 
         //Press to keep bucket up for endgame
