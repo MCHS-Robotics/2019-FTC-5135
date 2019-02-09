@@ -106,8 +106,12 @@ public class TeleOp5135_V3 extends OpMode
         else if(forward < 0)
             forward = -Math.pow(forward, 2);
 
-        turn = Math.pow(turn, 3);
-//        else if(turn < 0)
+        if(turn > 0)
+            turn = Math.pow(turn, 2);
+        else if(turn < 0)
+            turn = -Math.pow(turn, 2);
+//
+// else if(turn < 0)
 //            turn = -Math.pow(turn, 2);
         telemetry.addData("Forward Power", forward);
         telemetry.addData("Turn Power", turn);
@@ -123,12 +127,18 @@ public class TeleOp5135_V3 extends OpMode
         else
             lift.setPower(0);
 
-        if (gamepad2.dpad_up || gamepad2.right_stick_y > 0)
+        if(gamepad2.right_stick_y > 0)
+            bucket.setPower(-gamepad2.right_stick_y * 0.8);
+        else if(gamepad2.right_stick_y < 0)
+            bucket.setPower(gamepad2.right_stick_y * 0.8);
+        else if (gamepad2.dpad_up)
             bucket.setPower(-.8);
-        else if (gamepad2.dpad_down || gamepad2.right_stick_y < 0)
+        else if (gamepad2.dpad_down)
             bucket.setPower(.8);
         else
             bucket.setPower(0);
+
+
 
         //Press to keep bucket up for endgame
         //NOTE: D-Pad will not work unless gamepad2 B is pressed to end the override
