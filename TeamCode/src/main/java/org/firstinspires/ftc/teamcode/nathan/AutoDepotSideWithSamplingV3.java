@@ -111,7 +111,7 @@ public class AutoDepotSideWithSamplingV3 extends LinearOpMode {
         drive.forward(2);
         //robot.liftDown()
         Sample(drive);
-        robot.wristUp();
+        //robot.wristUp();
         robot.extendOut();
         collection.setPower(0.8);
         sleep(1000);
