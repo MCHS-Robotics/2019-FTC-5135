@@ -128,7 +128,7 @@ public class AutoDepotSideWithSamplingV3 extends LinearOpMode {
             case 2: //middle
                 robot.forward(-6);
                 robot.pivotLeft(170);
-                robot.forward(-30);
+                robot.forward(-40);
                 break;
             case 3: // right
                 robot.pivotRight(170);
@@ -136,9 +136,16 @@ public class AutoDepotSideWithSamplingV3 extends LinearOpMode {
 
                 break;
         }
-        robot.bucketUp();
+        //robot.bucketUp();
+        //sleep(1000);
+        //robot.bucketDown();
+        bucket.setPower(-0.8);
         sleep(1000);
-        robot.bucketDown();
+        bucket.setPower(0);
+        bucket.setPower(0.8);
+        sleep(1000);
+        bucket.setPower(0);
+
     }
 
 
