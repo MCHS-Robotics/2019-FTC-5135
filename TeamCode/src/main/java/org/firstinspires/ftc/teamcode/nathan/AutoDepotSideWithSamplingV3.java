@@ -110,24 +110,35 @@ public class AutoDepotSideWithSamplingV3 extends LinearOpMode {
         robot.liftUp();
         drive.forward(2);
         //robot.liftDown()
+        robot.wristUp();
         Sample(drive);
-        //robot.wristUp();
-        robot.extendOut();
-        collection.setPower(0.8);
-        sleep(1000);
-        collection.setPower(0);
 
-        //switch(path){
-            //case 1:
-                //TODO turn robot and got to crater
-                //break;
-            //case 2:
-                //TODO turn robot and got to crater
-                //break;
-            //case 3:
-                //TODO turn robot and got to crater
-                //break;
-        //}
+        //robot.extendOut();
+        //collection.setPower(0.8);
+        //sleep(1000);
+        //collection.setPower(0);
+
+        switch(path){
+            case 1:
+                robot.pivotLeft(180);
+                robot.forward(-12);
+                robot.bucketUp();
+                robot.bucketDown();
+                break;
+            case 2:
+                robot.forward(-6);
+                robot.pivotLeft(180);
+                robot.forward(-14);
+                robot.bucketUp();
+                robot.bucketDown();
+                break;
+            case 3:
+                robot.pivotRight(180);
+                robot.forward(-12);
+                robot.bucketUp();
+                robot.bucketDown();
+                break;
+        }
 
 
     }
@@ -176,7 +187,9 @@ public class AutoDepotSideWithSamplingV3 extends LinearOpMode {
             drive.forward(24);
             drive.pivotLeft(30);
             drive.forward(9);
+
             path = 1;
+
         } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
             telemetry.addData("Gold Mineral Position", "Right");
             drive.pivotLeft(45);
