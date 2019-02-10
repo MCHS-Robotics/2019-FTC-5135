@@ -109,52 +109,53 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
     }
 
     private void detect() {
-            if (tfod != null) {
-                // getUpdatedRecognitions() will return null if no new information is available since
-                // the last time that call was made.
-                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                if (updatedRecognitions != null) {
-                    telemetry.addData("# Object Detected", updatedRecognitions.size());
-                    if (updatedRecognitions.size() == 2 || updatedRecognitions.size() == 3){
-                        if(updatedRecognitions.size() == 2)
-                            twoMinerals = true;
-                        else
-                            twoMinerals = false;
-                        twoSilver = twoMinerals;
-                        if(twoMinerals) {
+        if (tfod != null) {
+            // getUpdatedRecognitions() will return null if no new information is available since
+            // the last time that call was made.
+            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+            if (updatedRecognitions != null) {
+                telemetry.addData("# Object Detected", updatedRecognitions.size());
+                if (updatedRecognitions.size() == 2 || updatedRecognitions.size() == 3) {
+                    if (updatedRecognitions.size() == 2 || updatedRecognitions.size() == 3) {
+                        if (updatedRecognitions.size() == 2 || updatedRecognitions.size() == 3) {
+                            if (updatedRecognitions.size() == 2)
+                                twoMinerals = true;
+                            else
+                                twoMinerals = false;
+                            twoSilver = twoMinerals;
+                            if (twoMinerals) {
+                                for (Recognition recognition : updatedRecognitions) {
+                                    if (recognition.getLabel().equals((LABEL_GOLD_MINERAL)))
+                                        twoSilver = false;
+                                }
+                            }
                             for (Recognition recognition : updatedRecognitions) {
-                                if (recognition.getLabel().equals((LABEL_GOLD_MINERAL)))
-                                    twoSilver = false;
+                                if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                                    goldMineralX = (int) recognition.getLeft();
+
+                                } else if (silverMineral1X == -1) {
+                                    silverMineral1X = (int) recognition.getLeft();
+                                } else {
+                                    silverMineral2X = (int) recognition.getLeft();
+                                }
                             }
+
+
+                            telemetry.addData("GoldX", goldMineralX);
+                            telemetry.addData("Silver1X", silverMineral1X);
+                            telemetry.addData("Silver2X", silverMineral2X);
+                            telemetry.update();
+                        } else {
+                            goldMineralX = -1;
+                            silverMineral1X = -1;
+                            silverMineral2X = -1;
                         }
-                        for (Recognition recognition : updatedRecognitions) {
-                            if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                                goldMineralX = (int) recognition.getLeft();
-
-                            } else if (silverMineral1X == -1) {
-                                silverMineral1X = (int) recognition.getLeft();
-                            }
-                            else{
-                                silverMineral2X = (int) recognition.getLeft();
-                            }
-                        }
-
-
-                        telemetry.addData("GoldX", goldMineralX);
-                        telemetry.addData("Silver1X", silverMineral1X);
-                        telemetry.addData("Silver2X", silverMineral2X);
-                        telemetry.update();
-                    }
-                    else {
-                        goldMineralX = -1;
-                        silverMineral1X = -1;
-                        silverMineral2X = -1;
                     }
                 }
             }
+
+        }
     }
-
-
 
     private void Sample(NormalDriveEncoders drive, Robot robot) {
 //        boolean twoSilver = Math.abs(silverMineral1X - silverMineral2X) < 15;
@@ -165,7 +166,7 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
             telemetry.update();
             drive.pivotLeft(35);
             drive.forward(24);
-            drive.pivotRight(35);
+            drive.pivotRight(20);
             drive.forward(8);
             path = 1;
         }
@@ -177,7 +178,7 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
             drive.pivotRight(35);
             drive.forward(24);
             robot.collectIn(10);
-            drive.pivotLeft(35);
+            drive.pivotLeft(20);
             drive.forward(8);
             path = 3;
         }
