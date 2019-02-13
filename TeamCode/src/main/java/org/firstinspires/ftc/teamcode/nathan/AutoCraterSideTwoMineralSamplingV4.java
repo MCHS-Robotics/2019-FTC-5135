@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.nathan;
 
+import com.google.gson.typeadapters.PostConstructAdapterFactory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -18,7 +19,7 @@ import java.util.zip.GZIPOutputStream;
 /**
  * Created by student on 11/29/18.
  */
-@Autonomous(name="AutoCraterSideTwoMineralSamplingV4")
+@Autonomous(name = "AutoCraterSideTwoMineralSamplingV4")
 // @Disabled
 public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
@@ -31,12 +32,7 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
     private CRServo bucket = null;
     private DcMotor extension = null;
     //path 1 = left - path 2 = middle - path 3 = right
-    private int path = -1;
-    private int goldMineralX = -1;
-    private int silverMineral1X = -1;
-    private int silverMineral2X = -1;
-    private boolean twoMinerals = false;
-    private boolean twoSilver = false;
+    private Position position = Position.CENTER;
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
@@ -57,30 +53,30 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        left = hardwareMap.get(DcMotor.class, "left");
-        right = hardwareMap.get(DcMotor.class, "right");
-        wrist = hardwareMap.crservo.get("wrist");
-        extension = hardwareMap.get(DcMotor.class, "extension");
-        lift = hardwareMap.get(DcMotor.class, "lift");
+//        left = hardwareMap.get(DcMotor.class, "left");
+//        right = hardwareMap.get(DcMotor.class, "right");
+//        wrist = hardwareMap.crservo.get("wrist");
+//        extension = hardwareMap.get(DcMotor.class, "extension");
+//        lift = hardwareMap.get(DcMotor.class, "lift");
 
-
-        //lift = hardwareMap.get(DcMotor.class, "lift");
-        bucket = hardwareMap.crservo.get("bucket");
-        //fBucket = hardwareMap.get(DcMotor.class, "fBucket");
-        //fBucket.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        extension.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        collection = hardwareMap.crservo.get("collection");
-        //lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        // Most robots need the motor on one side to be reversed to drive forward
-        // Reverse the motor that runs backwards when connected directly to the battery
-        left.setDirection(DcMotor.Direction.REVERSE);
-        right.setDirection(DcMotor.Direction.FORWARD);
-        //lift.setDirection(DcMotor.Direction.FORWARD);
-        // fBucket.setDirection(DcMotor.Direction.FORWARD);
+//
+//        //lift = hardwareMap.get(DcMotor.class, "lift");
+//        bucket = hardwareMap.crservo.get("bucket");
+//        //fBucket = hardwareMap.get(DcMotor.class, "fBucket");
+//        //fBucket.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//
+//        extension.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        collection = hardwareMap.crservo.get("collection");
+//        //lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        // Most robots need the motor on one side to be reversed to drive forward
+//        // Reverse the motor that runs backwards when connected directly to the battery
+//        left.setDirection(DcMotor.Direction.REVERSE);
+//        right.setDirection(DcMotor.Direction.FORWARD);
+//        //lift.setDirection(DcMotor.Direction.FORWARD);
+//        // fBucket.setDirection(DcMotor.Direction.FORWARD);
 
         NormalDriveEncoders drive = new NormalDriveEncoders(left, right, telemetry, .3f, this);
         Robot robot = new Robot(lift, extension, wrist, bucket, collection, drive);
@@ -88,24 +84,27 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
             /** Activate Tensor Flow Object Detection. */
             tfod.activate();
         }
-        while(!opModeIsActive()) {
+        while (!opModeIsActive()) {
             detect();
+            telemetry.addData("POS", position.toString());
+            telemetry.update();
         }
         if (opModeIsActive()) {
             runtime.reset();
         }
 
-        left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.wristDown();
-        robot.liftUp();
-        robot.forward(4);
-        Sample(drive,robot);
-        telemetry.update();
-        robot.extendOut();
-        robot.liftDown();
+
+//        left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//        robot.wristDown();
+//        robot.liftUp();
+//        robot.forward(4);
+//        Sample(drive, robot);
+//        telemetry.update();
+//        robot.extendOut();
+//        robot.liftDown();
     }
 
     private void detect() {
@@ -113,66 +112,46 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
             // getUpdatedRecognitions() will return null if no new information is available since
             // the last time that call was made.
             List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+
             if (updatedRecognitions != null) {
-                telemetry.addData("# Object Detected", updatedRecognitions.size());
-                if (updatedRecognitions.size() == 2 || updatedRecognitions.size() == 3) {
-                    if (updatedRecognitions.size() == 2 || updatedRecognitions.size() == 3) {
-                        if (updatedRecognitions.size() == 2 || updatedRecognitions.size() == 3) {
-                            if (updatedRecognitions.size() == 2)
-                                twoMinerals = true;
-                            else
-                                twoMinerals = false;
-                            twoSilver = twoMinerals;
-                            if (twoMinerals) {
-                                for (Recognition recognition : updatedRecognitions) {
-                                    if (recognition.getLabel().equals((LABEL_GOLD_MINERAL)))
-                                        twoSilver = false;
-                                }
-                            }
-                            for (Recognition recognition : updatedRecognitions) {
-                                if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                                    goldMineralX = (int) recognition.getLeft();
-
-                                } else if (silverMineral1X == -1) {
-                                    silverMineral1X = (int) recognition.getLeft();
-                                } else {
-                                    silverMineral2X = (int) recognition.getLeft();
-                                }
-                            }
-
-
-                            telemetry.addData("GoldX", goldMineralX);
-                            telemetry.addData("Silver1X", silverMineral1X);
-                            telemetry.addData("Silver2X", silverMineral2X);
-                            telemetry.update();
-                        } else {
-                            goldMineralX = -1;
-                            silverMineral1X = -1;
-                            silverMineral2X = -1;
+                // selection sort recognitions by left coordinate
+                for (int i = 0; i < updatedRecognitions.size() - 1; i++) {
+                    int index = i;
+                    for (int j = i + 1; j < updatedRecognitions.size(); j++) {
+                        if (updatedRecognitions.get(j).getLeft() < updatedRecognitions.get(index).getLeft()) {
+                            index = j;
                         }
                     }
+                    Recognition temp = updatedRecognitions.get(index);
+                    updatedRecognitions.set(index, updatedRecognitions.get(i));
+                    updatedRecognitions.set(i, temp);
+                }
+
+                telemetry.addData("# Object Detected", updatedRecognitions.size());
+                if (updatedRecognitions.size() == 2 || updatedRecognitions.size() == 3) {
+                    if (updatedRecognitions.get(0).getLabel().equals(LABEL_GOLD_MINERAL))
+                        position = Position.LEFT;
+                    else if (updatedRecognitions.get(1).getLabel().equals(LABEL_GOLD_MINERAL))
+                        position = Position.CENTER;
+                    else
+                        position = Position.RIGHT;
+
+                } else {
+                    position = Position.CENTER;
                 }
             }
-
         }
     }
 
     private void Sample(NormalDriveEncoders drive, Robot robot) {
-//        boolean twoSilver = Math.abs(silverMineral1X - silverMineral2X) < 15;
-        if ((twoMinerals && !twoSilver && goldMineralX < silverMineral1X)
-        || (!twoMinerals && goldMineralX < silverMineral1X && goldMineralX < silverMineral2X))
-        {
+        if (position == Position.LEFT) {
             telemetry.addData("Gold Mineral Position", "Left");
             telemetry.update();
             drive.pivotLeft(35);
             drive.forward(24);
             drive.pivotRight(20);
             drive.forward(8);
-            path = 1;
-        }
-        else if ((twoMinerals && twoSilver)
-        || (!twoMinerals && goldMineralX > silverMineral2X && goldMineralX > silverMineral1X))
-        {
+        } else if (position == Position.RIGHT) {
             telemetry.addData("Gold Mineral Position", "Right");
             telemetry.update();
             drive.pivotRight(35);
@@ -180,13 +159,10 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
             robot.collectIn(10);
             drive.pivotLeft(20);
             drive.forward(8);
-            path = 3;
-        }
-        else {
+        } else {
             telemetry.addData("Gold Mineral Position", "Center");
             telemetry.update();
             drive.forward(22);
-            path = 2;
         }
         telemetry.update();
     }
@@ -215,5 +191,9 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
+    }
+    private enum Position
+    {
+        LEFT, CENTER, RIGHT
     }
 }

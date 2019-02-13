@@ -29,8 +29,9 @@ public class NormalDriveEncoders {
 
     public void forward(float in) {
 
+        left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         int pos = (int)((encoder * in)/(4 * Math.PI));
-
         left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         left.setTargetPosition(pos);
@@ -68,6 +69,8 @@ public class NormalDriveEncoders {
 
         left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         left.setTargetPosition(pos);
         right.setTargetPosition(-pos);
         left.setPower(power);

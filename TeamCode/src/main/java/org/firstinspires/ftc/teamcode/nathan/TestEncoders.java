@@ -23,7 +23,7 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-       // @TeleOp(name="TestEncoders", group="Iterative Opmode")
+        @TeleOp(name="TestEncoders", group="Iterative Opmode")
 //@Disabled
         public class TestEncoders extends OpMode
         {
@@ -49,7 +49,7 @@ import com.qualcomm.robotcore.util.Range;
                 // Most robots need the motor on one side to be reversed to drive forward
                 // Reverse the motor that runs backwards when connected directly to the battery
                 left.setDirection(DcMotor.Direction.REVERSE);
-                right.setDirection(DcMotor.Direction.REVERSE);
+                right.setDirection(DcMotor.Direction.FORWARD);
 
 
                 // Tell the driver that initialization is complete.
