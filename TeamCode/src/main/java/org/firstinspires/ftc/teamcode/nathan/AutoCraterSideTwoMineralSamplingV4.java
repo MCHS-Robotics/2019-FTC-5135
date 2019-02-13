@@ -53,30 +53,30 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-//        left = hardwareMap.get(DcMotor.class, "left");
-//        right = hardwareMap.get(DcMotor.class, "right");
-//        wrist = hardwareMap.crservo.get("wrist");
-//        extension = hardwareMap.get(DcMotor.class, "extension");
-//        lift = hardwareMap.get(DcMotor.class, "lift");
+        left = hardwareMap.get(DcMotor.class, "left");
+        right = hardwareMap.get(DcMotor.class, "right");
+        wrist = hardwareMap.crservo.get("wrist");
+        extension = hardwareMap.get(DcMotor.class, "extension");
+        lift = hardwareMap.get(DcMotor.class, "lift");
 
-//
-//        //lift = hardwareMap.get(DcMotor.class, "lift");
-//        bucket = hardwareMap.crservo.get("bucket");
-//        //fBucket = hardwareMap.get(DcMotor.class, "fBucket");
-//        //fBucket.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//
-//        extension.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        collection = hardwareMap.crservo.get("collection");
-//        //lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        // Most robots need the motor on one side to be reversed to drive forward
-//        // Reverse the motor that runs backwards when connected directly to the battery
-//        left.setDirection(DcMotor.Direction.REVERSE);
-//        right.setDirection(DcMotor.Direction.FORWARD);
-//        //lift.setDirection(DcMotor.Direction.FORWARD);
-//        // fBucket.setDirection(DcMotor.Direction.FORWARD);
+
+        //lift = hardwareMap.get(DcMotor.class, "lift");
+        bucket = hardwareMap.crservo.get("bucket");
+        //fBucket = hardwareMap.get(DcMotor.class, "fBucket");
+        //fBucket.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        extension.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        collection = hardwareMap.crservo.get("collection");
+        //lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        // Most robots need the motor on one side to be reversed to drive forward
+        // Reverse the motor that runs backwards when connected directly to the battery
+        left.setDirection(DcMotor.Direction.REVERSE);
+        right.setDirection(DcMotor.Direction.FORWARD);
+        //lift.setDirection(DcMotor.Direction.FORWARD);
+        // fBucket.setDirection(DcMotor.Direction.FORWARD);
 
         NormalDriveEncoders drive = new NormalDriveEncoders(left, right, telemetry, .3f, this);
         Robot robot = new Robot(lift, extension, wrist, bucket, collection, drive);
@@ -93,18 +93,28 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
             runtime.reset();
         }
 
-
-//        left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//        robot.wristDown();
-//        robot.liftUp();
-//        robot.forward(4);
-//        Sample(drive, robot);
-//        telemetry.update();
-//        robot.extendOut();
-//        robot.liftDown();
+        left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.wristDown();
+        robot.liftUp();
+        robot.forward(4);
+        Sample(drive, robot);
+        robot.pivotLeft(90);
+        if(position == Position.RIGHT)
+            robot.forward(54);
+        else if(position == Position.LEFT)
+            robot.forward(42);
+        else
+            robot.forward(30);
+        robot.pivotLeft(45);
+        robot.forward(50);
+        robot.pivotLeft(180);
+        robot.bucketUp();
+        robot.forward(60);
+        robot.extendOut();
+        robot.liftDown();
     }
 
     private void detect() {
@@ -150,7 +160,8 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
             drive.pivotLeft(35);
             drive.forward(24);
             drive.pivotRight(20);
-            drive.forward(8);
+            drive.forward(6);
+            drive.backward(6);
         } else if (position == Position.RIGHT) {
             telemetry.addData("Gold Mineral Position", "Right");
             telemetry.update();
@@ -158,11 +169,13 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
             drive.forward(24);
             robot.collectIn(10);
             drive.pivotLeft(20);
-            drive.forward(8);
+            drive.forward(6);
+            drive.backward(6);
         } else {
             telemetry.addData("Gold Mineral Position", "Center");
             telemetry.update();
-            drive.forward(22);
+            drive.forward(18);
+            drive.backward(6);
         }
         telemetry.update();
     }
