@@ -3,6 +3,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
@@ -15,11 +16,11 @@ public class TeleOp5135_V3 extends OpMode
     private DcMotor left = null;
     private DcMotor right = null;
     private DcMotor lift = null;
-    private CRServo wrist = null;
+    private Servo wrist = null;
     private boolean bucketOverride = false;
     //private DcMotor fBucket = null;
     private CRServo collection = null;
-    private CRServo bucket = null;
+    private Servo bucket = null;
     private DcMotor extension = null;
     /* extension gamepad 1
     wrist on triggers return double
@@ -40,13 +41,13 @@ public class TeleOp5135_V3 extends OpMode
         // step (using the FTC Robot Controller app on the phone).
         left = hardwareMap.get(DcMotor.class, "left");
         right = hardwareMap.get(DcMotor.class, "right");
-        wrist = hardwareMap.crservo.get("wrist");
+        wrist = hardwareMap.servo.get("wrist");
         extension = hardwareMap.get(DcMotor.class, "extension");
         lift = hardwareMap.get(DcMotor.class, "lift");
 
 
         //lift = hardwareMap.get(DcMotor.class, "lift");
-        bucket = hardwareMap.crservo.get("bucket");
+        bucket = hardwareMap.servo.get("bucket");
         //fBucket = hardwareMap.get(DcMotor.class, "fBucket");
         //fBucket.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -118,7 +119,14 @@ public class TeleOp5135_V3 extends OpMode
         left.setPower(Range.clip(forward - turn, -1, 1));
         right.setPower(Range.clip(forward + turn, -1, 1));
         collection.setPower(0.8*(Range.clip(collect, -1.0, 1.0)));
-        wrist.setPower(0.8*(Range.clip(wristPower, -1, 1)));
+        if(gamepad1.left_trigger > 0 && wrist.getPosition() <= 1)
+        {
+            wrist.setPosition(wrist.getPosition() + 0.05);
+        }
+        else if(gamepad2.right_trigger > 0 && wrist.getPosition() >= 0)
+        {
+            wrist.setPosition(wrist.getPosition() - 0.05);
+        }
 
         if(gamepad2.left_stick_y >0.2)
             lift.setPower(-1);
@@ -127,14 +135,12 @@ public class TeleOp5135_V3 extends OpMode
         else
             lift.setPower(0);
 
-
-        if (gamepad2.dpad_up)
-            bucket.setPower(-.8);
-        else if (gamepad2.dpad_down)
-            bucket.setPower(.8);
-        else
-            bucket.setPower(-gamepad2.right_stick_y * 0.8);
-
+        if(gamepad2.a)
+            bucket.setPosition(.8);
+        if (gamepad2.dpad_up && bucket.getPosition() <= 1)
+            bucket.setPosition(bucket.getPosition() + .05);
+        else if (gamepad2.dpad_down && bucket.getPosition() >= 0)
+            bucket.setPosition(bucket.getPosition() + .05);
 
 
         //Press to keep bucket up for endgame

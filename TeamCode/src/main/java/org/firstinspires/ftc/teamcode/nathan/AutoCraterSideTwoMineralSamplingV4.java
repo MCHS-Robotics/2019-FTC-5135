@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -26,10 +27,10 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
     private DcMotor left = null;
     private DcMotor right = null;
     private DcMotor lift = null;
-    private CRServo wrist = null;
+    private Servo wrist = null;
     //private DcMotor fBucket = null;
     private CRServo collection = null;
-    private CRServo bucket = null;
+    private Servo bucket = null;
     private DcMotor extension = null;
     //path 1 = left - path 2 = middle - path 3 = right
     private Position position = Position.CENTER;
@@ -55,13 +56,13 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
         // step (using the FTC Robot Controller app on the phone).
         left = hardwareMap.get(DcMotor.class, "left");
         right = hardwareMap.get(DcMotor.class, "right");
-        wrist = hardwareMap.crservo.get("wrist");
+        wrist = hardwareMap.servo.get("wrist");
         extension = hardwareMap.get(DcMotor.class, "extension");
         lift = hardwareMap.get(DcMotor.class, "lift");
 
 
         //lift = hardwareMap.get(DcMotor.class, "lift");
-        bucket = hardwareMap.crservo.get("bucket");
+        bucket = hardwareMap.servo.get("bucket");
         //fBucket = hardwareMap.get(DcMotor.class, "fBucket");
         //fBucket.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -101,17 +102,20 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
         robot.liftUp();
         robot.forward(4);
         Sample(drive, robot);
-        robot.pivotLeft(90);
+        robot.pivotLeft(90); //turn towards wall
         if(position == Position.RIGHT)
             robot.forward(54);
         else if(position == Position.LEFT)
             robot.forward(42);
         else
             robot.forward(30);
+        //go toward depot
         robot.pivotLeft(45);
         robot.forward(50);
+        //turn around and dump
         robot.pivotLeft(180);
         robot.bucketUp();
+        //go back to crater and park
         robot.forward(60);
         robot.extendOut();
         robot.liftDown();

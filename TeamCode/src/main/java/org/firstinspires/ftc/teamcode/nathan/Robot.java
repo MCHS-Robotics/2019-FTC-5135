@@ -3,16 +3,17 @@ package org.firstinspires.ftc.teamcode.nathan;
 
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 
 public class Robot {
     private DcMotor lift = null;
-    private CRServo wrist = null;
+    private Servo wrist = null;
     private CRServo collection = null;
-    private CRServo bucket = null;
+    private Servo bucket = null;
     private DcMotor extension = null;
     private NormalDriveEncoders drive = null;
-    public Robot(DcMotor lift,  DcMotor extension, CRServo wrist, CRServo bucket,
+    public Robot(DcMotor lift,  DcMotor extension, Servo wrist, Servo bucket,
                  CRServo collection, NormalDriveEncoders drive) {
         this.lift = lift;
         this.extension = extension;
@@ -30,7 +31,7 @@ public class Robot {
     {
         lift.setTargetPosition(7100);
         while(lift.isBusy()) {
-            lift.setPower(.65);
+            lift.setPower(1);
         }
         lift.setPower(0);
     }
@@ -42,7 +43,7 @@ public class Robot {
     {
         lift.setTargetPosition(0);
         while(lift.isBusy()){
-            lift.setPower(-.65);
+            lift.setPower(-1);
         }
         lift.setPower(0);
     }
@@ -50,13 +51,7 @@ public class Robot {
      * Raises the wrist
      */
     public void wristUp() {
-        wrist.setPower(-.8);
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        wrist.setPower(0);
+        wrist.setPosition(1);
     }
 
     public void forward(float inches) {
@@ -79,13 +74,7 @@ public class Robot {
      * Lowers the wrist
      */
     public void wristDown() {
-        wrist.setPower(.8);
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        wrist.setPower(0);
+        wrist.setPosition(0);
     }
 
     /**
@@ -93,7 +82,7 @@ public class Robot {
      */
     public void extendOut()
     {
-        extension.setPower(-.75);
+        extension.setPower(-1);
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
@@ -107,7 +96,7 @@ public class Robot {
      */
     public void extendIn()
     {
-        extension.setPower(.75);
+        extension.setPower(1);
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
@@ -148,23 +137,11 @@ public class Robot {
 
     public void bucketDown()
     {
-        bucket.setPower(-8);
-        try {
-            Thread.sleep(600);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        bucket.setPower(0);
+        bucket.setPosition(0);
     }
 
     public void bucketUp()
     {
-        bucket.setPower(8);
-        try {
-            Thread.sleep(600);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        bucket.setPower(0);
+        bucket.setPosition(1);
     }
 }
