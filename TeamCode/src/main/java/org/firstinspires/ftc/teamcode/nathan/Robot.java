@@ -58,7 +58,7 @@ public class Robot {
         drive.forward(inches);
     }
 
-    public void backard(float inches) {
+    public void backward(float inches) {
         drive.backward(inches);
     }
 
