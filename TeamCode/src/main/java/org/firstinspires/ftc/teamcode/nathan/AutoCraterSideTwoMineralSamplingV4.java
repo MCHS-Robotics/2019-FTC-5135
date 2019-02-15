@@ -171,7 +171,6 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
             telemetry.update();
             drive.pivotRight(35);
             drive.forward(24);
-            robot.collectIn(10);
             drive.pivotLeft(20);
             drive.forward(6);
             drive.backward(6);
