@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -20,14 +21,15 @@ import java.util.List;
 @Autonomous(name="AutoDepotSideWithSamplingAndLatchingV3")
 // @Disabledl
 public class AutoDepotSideWithSamplingV3 extends LinearOpMode {
+    private Position position = Position.CENTER;
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor left = null;
     private DcMotor right = null;
     private DcMotor lift = null;
-    private CRServo wrist = null;
+    private Servo wrist = null;
     //private DcMotor fBucket = null;
     private CRServo collection = null;
-    private CRServo bucket = null;
+    private Servo bucket = null;
     private DcMotor extension = null;
     //path 1 = left - path 2 = middle - path 3 = right
     private int path = -1;
@@ -63,13 +65,13 @@ public class AutoDepotSideWithSamplingV3 extends LinearOpMode {
         // step (using the FTC Robot Controller app on the phone).
         left = hardwareMap.get(DcMotor.class, "left");
         right = hardwareMap.get(DcMotor.class, "right");
-        wrist = hardwareMap.crservo.get("wrist");
+        wrist = hardwareMap.servo.get("wrist");
         extension = hardwareMap.get(DcMotor.class, "extension");
         lift = hardwareMap.get(DcMotor.class, "lift");
 
 
         //lift = hardwareMap.get(DcMotor.class, "lift");
-        bucket = hardwareMap.crservo.get("bucket");
+        bucket = hardwareMap.servo.get("bucket");
         //fBucket = hardwareMap.get(DcMotor.class, "fBucket");
         //fBucket.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -115,11 +117,6 @@ public class AutoDepotSideWithSamplingV3 extends LinearOpMode {
         robot.wristUp();
         Sample(drive, robot);
 
-        //robot.extendOut();
-        //collection.setPower(0.8);
-        //sleep(1000);
-        //collection.setPower(0);
-
         switch(path){
             case 1: //left
                 robot.pivotLeft(170);
@@ -136,16 +133,8 @@ public class AutoDepotSideWithSamplingV3 extends LinearOpMode {
 
                 break;
         }
-        //robot.bucketUp();
-        //sleep(1000);
-        //robot.bucketDown();
-        bucket.setPower(-0.8);
-        sleep(1000);
-        bucket.setPower(0);
-        bucket.setPower(0.8);
-        sleep(1000);
-        bucket.setPower(0);
 
+        robot.bucketUp();
     }
 
 
@@ -154,78 +143,60 @@ public class AutoDepotSideWithSamplingV3 extends LinearOpMode {
             // getUpdatedRecognitions() will return null if no new information is available since
             // the last time that call was made.
             List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+
             if (updatedRecognitions != null) {
-                telemetry.addData("# Object Detected", updatedRecognitions.size());
-                if (updatedRecognitions.size() == 2 || updatedRecognitions.size() == 3){
-                    if(updatedRecognitions.size() == 2)
-                        twoMinerals = true;
-                    else
-                        twoMinerals = false;
-                    twoSilver = twoMinerals;
-                    if(twoMinerals) {
-                        for (Recognition recognition : updatedRecognitions) {
-                            if (recognition.getLabel().equals((LABEL_GOLD_MINERAL)))
-                                twoSilver = false;
+                // selection sort recognitions by left coordinate
+                for (int i = 0; i < updatedRecognitions.size() - 1; i++) {
+                    int index = i;
+                    for (int j = i + 1; j < updatedRecognitions.size(); j++) {
+                        if (updatedRecognitions.get(j).getLeft() < updatedRecognitions.get(index).getLeft()) {
+                            index = j;
                         }
                     }
-                    for (Recognition recognition : updatedRecognitions) {
-                        if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                            goldMineralX = (int) recognition.getLeft();
-
-                        } else if (silverMineral1X == -1) {
-                            silverMineral1X = (int) recognition.getLeft();
-                        }
-                        else{
-                            silverMineral2X = (int) recognition.getLeft();
-                        }
-                    }
-
-
-                    telemetry.addData("GoldX", goldMineralX);
-                    telemetry.addData("Silver1X", silverMineral1X);
-                    telemetry.addData("Silver2X", silverMineral2X);
-                    telemetry.update();
+                    Recognition temp = updatedRecognitions.get(index);
+                    updatedRecognitions.set(index, updatedRecognitions.get(i));
+                    updatedRecognitions.set(i, temp);
                 }
-                else {
-                    goldMineralX = -1;
-                    silverMineral1X = -1;
-                    silverMineral2X = -1;
+
+                telemetry.addData("# Object Detected", updatedRecognitions.size());
+                if (updatedRecognitions.size() == 2 || updatedRecognitions.size() == 3) {
+                    if (updatedRecognitions.get(0).getLabel().equals(LABEL_GOLD_MINERAL))
+                        position = Position.LEFT;
+                    else if (updatedRecognitions.get(1).getLabel().equals(LABEL_GOLD_MINERAL))
+                        position = Position.CENTER;
+                    else
+                        position = Position.RIGHT;
+
+                } else {
+                    position = Position.CENTER;
                 }
             }
         }
     }
 
-
     private void Sample(NormalDriveEncoders drive, Robot robot) {
-//        boolean twoSilver = Math.abs(silverMineral1X - silverMineral2X) < 15;
-        if ((twoMinerals && !twoSilver && goldMineralX < silverMineral1X)
-                || (!twoMinerals && goldMineralX < silverMineral1X && goldMineralX < silverMineral2X))
-        {
+        if (position == Position.LEFT) {
             telemetry.addData("Gold Mineral Position", "Left");
             telemetry.update();
             drive.pivotLeft(35);
-            drive.forward(20);
-            drive.pivotRight(35);
-            drive.forward(9);
-            path = 1;
-        }
-        else if ((twoMinerals && twoSilver)
-                || (!twoMinerals && goldMineralX > silverMineral2X && goldMineralX > silverMineral1X))
-        {
+            drive.forward(24);
+            drive.pivotRight(20);
+            drive.forward(6);
+            drive.backward(6);
+        } else if (position == Position.RIGHT) {
             telemetry.addData("Gold Mineral Position", "Right");
             telemetry.update();
             drive.pivotRight(35);
-            drive.forward(20);
+            drive.forward(24);
             robot.collectIn(10);
-            drive.pivotLeft(35);
-            drive.forward(9);
-            path = 3;
-        }
-        else {
+            drive.pivotLeft(20);
+            drive.forward(6);
+            drive.backward(6);
+        } else {
             telemetry.addData("Gold Mineral Position", "Center");
             telemetry.update();
-            drive.forward(22);
-            path = 2;
+            drive.forward(18);
+            drive.backward(6);
         }
         telemetry.update();
     }
@@ -255,4 +226,6 @@ public class AutoDepotSideWithSamplingV3 extends LinearOpMode {
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
     }
+
+
 }
