@@ -51,7 +51,7 @@ public class Robot {
      * Raises the wrist
      */
     public void wristUp() {
-        wrist.setPosition(1);
+        wrist.setPosition(.75);
     }
 
     public void forward(float inches) {
