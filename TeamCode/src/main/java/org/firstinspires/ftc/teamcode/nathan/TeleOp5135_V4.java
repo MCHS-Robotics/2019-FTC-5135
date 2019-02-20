@@ -99,8 +99,6 @@ public class TeleOp5135_V4 extends OpMode
         double forward =  gamepad1.left_stick_y;
         double turn = gamepad1.right_stick_x;
         double collect = gamepad2.left_trigger - gamepad2.right_trigger;
-        double fBPower = gamepad2.right_stick_y;
-        double wristPower = gamepad1.left_trigger - gamepad1.right_trigger;
 
         if(forward > 0)
             forward = Math.pow(forward, 2);
@@ -119,11 +117,17 @@ public class TeleOp5135_V4 extends OpMode
         left.setPower(Range.clip(forward - turn, -1, 1));
         right.setPower(Range.clip(forward + turn, -1, 1));
         collection.setPower(0.8*(Range.clip(collect, -1.0, 1.0)));
-        if(gamepad1.left_trigger > 0 && wrist.getPosition() <= .95)
+
+        boolean wristUp = false;
+        if(gamepad1.a && !wristUp) //wrist up/down
+        { wrist.setPosition(1); }
+        else if(gamepad1.a && wristUp)
+        {   wrist.setPosition(0);}
+        else if(gamepad1.left_trigger > 0 && wrist.getPosition() <= .95)
         {
             wrist.setPosition(wrist.getPosition() + 0.05);
         }
-        else if(gamepad2.right_trigger > 0 && wrist.getPosition() >= .05)
+        else if(gamepad1.right_trigger > 0 && wrist.getPosition() >= .05)
         {
             wrist.setPosition(wrist.getPosition() - 0.05);
         }
@@ -135,12 +139,19 @@ public class TeleOp5135_V4 extends OpMode
         else
             lift.setPower(0);
 
-        if(gamepad2.a)
+        telemetry.addData("bucket posiition", bucket.getPosition());
+        telemetry.update();
+        boolean bucketUp = false;
+        if(gamepad2.a && !bucketUp) //bucket up/down
             bucket.setPosition(.8);
-        if (gamepad2.dpad_up && bucket.getPosition() <= 1)
+        else if(gamepad2.a && bucketUp)
+            bucket.setPosition(0);
+        if(gamepad2.b) //endgame
+            bucket.setPosition(.5);
+        if (gamepad2.dpad_up && bucket.getPosition() <= 0.95)
             bucket.setPosition(bucket.getPosition() + .05);
-        else if (gamepad2.dpad_down && bucket.getPosition() >= 0)
-            bucket.setPosition(bucket.getPosition() + .05);
+        else if (gamepad2.dpad_down && bucket.getPosition() >= 0.95)
+            bucket.setPosition(bucket.getPosition() - .05);
 
 
         //Press to keep bucket up for endgame
