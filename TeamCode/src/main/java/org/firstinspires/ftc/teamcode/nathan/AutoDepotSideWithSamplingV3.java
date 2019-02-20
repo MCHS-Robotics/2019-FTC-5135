@@ -117,24 +117,46 @@ public class AutoDepotSideWithSamplingV3 extends LinearOpMode {
         robot.wristUp();
         Sample(drive, robot);
 
-        switch(path){
+        switch(path){ //claim
             case 1: //left
-                robot.pivotLeft(170);
+                robot.forward(12);
+                robot.pivotLeft(90);
                 robot.backward(12);
                 break;
             case 2: //middle
-                robot.backward(6);
-                robot.pivotLeft(170);
-                robot.backward(40);
+                robot.pivotLeft(45);
+                robot.forward(12);
+                robot.pivotLeft(90);
                 break;
             case 3: // right
-                robot.pivotRight(170);
-                robot.backward(12);
-
+                robot.forward(12);
+                robot.pivotLeft(90);
+                robot.forward(36);
+                robot.pivotLeft(90);
+                robot.forward(12);
                 break;
         }
 
         robot.bucketUp();
+        robot.bucketDown();
+
+        //switch(path){ //park
+            //case 1: //left
+                //robot.forward(72);
+                //break;
+            //case 2: //middle
+                //robot.backward(6);
+                //robot.pivotLeft(170);
+                //robot.backward(40);
+               // break;
+            //case 3: // right
+                //robot.pivotRight(170);
+                //break;
+        //}
+        robot.forward(72);
+
+        robot.extendOut();
+        robot.wristDown();
     }
 
 
@@ -180,23 +202,21 @@ public class AutoDepotSideWithSamplingV3 extends LinearOpMode {
             telemetry.update();
             drive.pivotLeft(35);
             drive.forward(24);
-            drive.pivotRight(20);
-            drive.forward(6);
-            drive.backward(6);
+            drive.pivotLeft(10);
+            path = 1;
         } else if (position == Position.RIGHT) {
             telemetry.addData("Gold Mineral Position", "Right");
             telemetry.update();
             drive.pivotRight(35);
             drive.forward(24);
-            robot.collectIn(10);
-            drive.pivotLeft(20);
-            drive.forward(6);
-            drive.backward(6);
+            //robot.collectIn(10);
+            drive.pivotRight(10);
+            path = 3;
         } else {
             telemetry.addData("Gold Mineral Position", "Center");
             telemetry.update();
-            drive.forward(18);
-            drive.backward(6);
+            drive.forward(44);
+            path = 2;
         }
         telemetry.update();
     }
