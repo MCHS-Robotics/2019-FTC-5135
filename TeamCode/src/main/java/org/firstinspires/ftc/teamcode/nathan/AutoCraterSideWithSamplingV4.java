@@ -86,7 +86,7 @@ public class AutoCraterSideWithSamplingV4 extends LinearOpMode {
         // fBucket.setDirection(DcMotor.Direction.FORWARD);
 
         NormalDriveEncoders drive = new NormalDriveEncoders(left, right, telemetry, .3f, this);
-        Robot robot = new Robot(lift, extension, wrist, bucket, collection, drive);
+        RobotCR robot = new RobotCR(lift, extension, wrist, bucket, collection, drive);
 
         if (tfod != null) {
             /** Activate Tensor Flow Object Detection. */
@@ -149,7 +149,7 @@ public class AutoCraterSideWithSamplingV4 extends LinearOpMode {
 
 
 
-    private void Sample(NormalDriveEncoders drive, Robot robot) {
+    private void Sample(NormalDriveEncoders drive, RobotCR robot) {
 
         if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
             telemetry.addData("Gold Mineral Position", "Left");

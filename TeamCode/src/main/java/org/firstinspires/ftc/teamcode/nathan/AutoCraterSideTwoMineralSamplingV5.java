@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Created by student on 11/29/18.
  */
-@Autonomous(name = "AutoCraterSideTwoMineralSamplingV4")
+@Autonomous(name = "AutoCraterSideTwoMineralSamplingV5")
 // @Disabled
 public class AutoCraterSideTwoMineralSamplingV5 extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();

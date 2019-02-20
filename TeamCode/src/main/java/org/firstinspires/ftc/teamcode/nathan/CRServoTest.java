@@ -22,7 +22,7 @@ import com.qualcomm.robotcore.util.Range;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-//@TeleOp(name="CRServoTest", group="Iterative Opmode")
+@TeleOp(name="CRServoTest", group="Iterative Opmode")
 //@Disabled
 public class CRServoTest extends OpMode
 {
@@ -100,11 +100,11 @@ public class CRServoTest extends OpMode
         //collection.setPower(0.75*(Range.clip(collect, -1.0, 1.0)));
         if(gamepad1.dpad_up)
         {
-            collection.setPower(1);
+            collection.setPower(0.8);
         }
         else if(gamepad1.dpad_down)
         {
-            collection.setPower(-1);
+            collection.setPower(-0.8);
         }
         else
         {
