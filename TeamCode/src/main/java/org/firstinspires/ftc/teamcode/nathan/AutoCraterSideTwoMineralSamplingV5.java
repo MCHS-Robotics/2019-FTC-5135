@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.nathan;
 
-import com.google.gson.typeadapters.PostConstructAdapterFactory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -15,22 +14,21 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
-import java.util.zip.GZIPOutputStream;
 
 /**
  * Created by student on 11/29/18.
  */
 @Autonomous(name = "AutoCraterSideTwoMineralSamplingV4")
 // @Disabled
-public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
+public class AutoCraterSideTwoMineralSamplingV5 extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor left = null;
     private DcMotor right = null;
     private DcMotor lift = null;
-    private CRServo wrist = null;
+    private Servo wrist = null;
     //private DcMotor fBucket = null;
     private CRServo collection = null;
-    private CRServo bucket = null;
+    private Servo bucket = null;
     private DcMotor extension = null;
     //path 1 = left - path 2 = middle - path 3 = right
     private Position position = Position.CENTER;
@@ -56,13 +54,13 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
         // step (using the FTC Robot Controller app on the phone).
         left = hardwareMap.get(DcMotor.class, "left");
         right = hardwareMap.get(DcMotor.class, "right");
-        wrist = hardwareMap.crservo.get("wrist");
+        wrist = hardwareMap.servo.get("wrist");
         extension = hardwareMap.get(DcMotor.class, "extension");
         lift = hardwareMap.get(DcMotor.class, "lift");
 
 
         //lift = hardwareMap.get(DcMotor.class, "lift");
-        bucket = hardwareMap.crservo.get("bucket");
+        bucket = hardwareMap.servo.get("bucket");
         //fBucket = hardwareMap.get(DcMotor.class, "fBucket");
         //fBucket.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -80,7 +78,7 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
         // fBucket.setDirection(DcMotor.Direction.FORWARD);
 
         NormalDriveEncoders drive = new NormalDriveEncoders(left, right, telemetry, .3f, this);
-        RobotCR robot = new RobotCR(lift, extension, wrist, bucket, collection, drive);
+        Robot robot = new Robot(lift, extension, wrist, bucket, collection, drive);
         if (tfod != null) {
             /** Activate Tensor Flow Object Detection. */
             tfod.activate();
@@ -157,7 +155,7 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
         }
     }
 
-    private void Sample(NormalDriveEncoders drive, RobotCR robot) {
+    private void Sample(NormalDriveEncoders drive, Robot robot) {
         if (position == Position.LEFT) {
             telemetry.addData("Gold Mineral Position", "Left");
             telemetry.update();
