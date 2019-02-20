@@ -119,11 +119,11 @@ public class TeleOp5135_V3 extends OpMode
         left.setPower(Range.clip(forward - turn, -1, 1));
         right.setPower(Range.clip(forward + turn, -1, 1));
         collection.setPower(0.8*(Range.clip(collect, -1.0, 1.0)));
-        if(gamepad1.left_trigger > 0 && wrist.getPosition() <= 1)
+        if(gamepad1.left_trigger > 0 && wrist.getPosition() <= 0.95)
         {
             wrist.setPosition(wrist.getPosition() + 0.05);
         }
-        else if(gamepad2.right_trigger > 0 && wrist.getPosition() >= 0)
+        else if(gamepad2.right_trigger > 0 && wrist.getPosition() >= -0.95)
         {
             wrist.setPosition(wrist.getPosition() - 0.05);
         }
@@ -137,9 +137,9 @@ public class TeleOp5135_V3 extends OpMode
 
         if(gamepad2.a)
             bucket.setPosition(.8);
-        if (gamepad2.dpad_up && bucket.getPosition() <= 1)
+        if (gamepad2.dpad_up && bucket.getPosition() <= 0.95)
             bucket.setPosition(bucket.getPosition() + .05);
-        else if (gamepad2.dpad_down && bucket.getPosition() >= 0)
+        else if (gamepad2.dpad_down && bucket.getPosition() >= -0.95)
             bucket.setPosition(bucket.getPosition() + .05);
 
 
