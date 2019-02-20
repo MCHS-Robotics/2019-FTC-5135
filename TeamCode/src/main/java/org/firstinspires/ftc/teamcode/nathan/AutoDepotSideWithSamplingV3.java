@@ -120,16 +120,16 @@ public class AutoDepotSideWithSamplingV3 extends LinearOpMode {
         switch(path){
             case 1: //left
                 robot.pivotLeft(170);
-                robot.forward(-12);
+                robot.backward(12);
                 break;
             case 2: //middle
-                robot.forward(-6);
+                robot.backward(6);
                 robot.pivotLeft(170);
-                robot.forward(-40);
+                robot.backward(40);
                 break;
             case 3: // right
                 robot.pivotRight(170);
-                robot.forward(-12);
+                robot.backward(12);
 
                 break;
         }

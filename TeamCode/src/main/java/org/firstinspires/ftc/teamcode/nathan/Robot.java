@@ -29,7 +29,7 @@ public class Robot {
      */
     public void liftUp()
     {
-        lift.setTargetPosition(7100);
+        lift.setTargetPosition(3160);
         while(lift.isBusy()) {
             lift.setPower(1);
         }
@@ -58,7 +58,7 @@ public class Robot {
         drive.forward(inches);
     }
 
-    public void backard(float inches) {
+    public void backward(float inches) {
         drive.backward(inches);
     }
 
