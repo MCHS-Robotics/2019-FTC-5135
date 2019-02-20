@@ -117,7 +117,7 @@ public class AutoDepotSideWithSamplingV3 extends LinearOpMode {
         robot.wristUp();
         Sample(drive, robot);
 
-        switch(path){ //claim
+        /*switch(path){ //claim
             case 1: //left
                 robot.forward(12);
                 robot.pivotLeft(90);
@@ -135,7 +135,8 @@ public class AutoDepotSideWithSamplingV3 extends LinearOpMode {
                 robot.pivotLeft(90);
                 robot.forward(12);
                 break;
-        }
+        }*/
+        claim(robot);
 
         robot.bucketUp();
         robot.bucketDown();
@@ -219,6 +220,28 @@ public class AutoDepotSideWithSamplingV3 extends LinearOpMode {
             path = 2;
         }
         telemetry.update();
+    }
+
+    public void claim(Robot robot) {
+        switch(path){ //claim
+            case 1: //left
+                robot.forward(12);
+                robot.pivotLeft(90);
+                robot.backward(12);
+                break;
+            case 2: //middle
+                robot.pivotLeft(45);
+                robot.forward(12);
+                robot.pivotLeft(90);
+                break;
+            case 3: // right
+                robot.forward(12);
+                robot.pivotLeft(90);
+                robot.forward(36);
+                robot.pivotLeft(90);
+                robot.forward(12);
+                break;
+        }
     }
 
     private void initVuforia() {
