@@ -71,9 +71,8 @@ public class TeleOp5135_V4 extends OpMode
         telemetry.addData("right", right.getPower());
         //telemetry.addData("lift", lift.getPower());
         telemetry.addData("collection", collection.getPower());
-
-        wrist.setPosition(-1);
         bucket.setPosition(1);
+        wrist.setPosition(1);
         //telemetry.addData("fBucket", fBucket.getPower());
         //Robot robot = new Robot(lift, extension, wrist, bucket, collection, drive);
     }
@@ -150,7 +149,7 @@ public class TeleOp5135_V4 extends OpMode
         telemetry.addData("bucket posiition", bucket.getPosition());
         telemetry.update();
         boolean bucketUp = false;
-        if(gamepad2.a && !bucketUp) //bucket up
+        if(gamepad2.a && !bucketUp) //bucket dump
         {
             bucket.setPosition(1);
             bucketUp = true;
