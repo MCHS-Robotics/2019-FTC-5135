@@ -16,12 +16,15 @@ public class TeleOp5135_V4 extends OpMode
     private DcMotor left = null;
     private DcMotor right = null;
     private DcMotor lift = null;
-    private Servo wrist = null;
+    private CRServo wrist = null;
     private boolean bucketOverride = false;
     //private DcMotor fBucket = null;
     private CRServo collection = null;
     private Servo bucket = null;
     private DcMotor extension = null;
+    boolean bucketUp = false;
+    boolean wristUp = false;
+
     /* extension gamepad 1
     wrist on triggers return double
     extension on bumpers
@@ -41,7 +44,7 @@ public class TeleOp5135_V4 extends OpMode
         // step (using the FTC Robot Controller app on the phone).
         left = hardwareMap.get(DcMotor.class, "left");
         right = hardwareMap.get(DcMotor.class, "right");
-        wrist = hardwareMap.servo.get("wrist");
+        wrist = hardwareMap.crservo.get("wrist");
         extension = hardwareMap.get(DcMotor.class, "extension");
         lift = hardwareMap.get(DcMotor.class, "lift");
 
@@ -71,8 +74,8 @@ public class TeleOp5135_V4 extends OpMode
         telemetry.addData("right", right.getPower());
         //telemetry.addData("lift", lift.getPower());
         telemetry.addData("collection", collection.getPower());
-        bucket.setPosition(1);
-        wrist.setPosition(1);
+        bucket.setPosition(-1);
+        //wrist.setPosition(-1);
         //telemetry.addData("fBucket", fBucket.getPower());
         //Robot robot = new Robot(lift, extension, wrist, bucket, collection, drive);
     }
@@ -101,6 +104,7 @@ public class TeleOp5135_V4 extends OpMode
         double forward =  gamepad1.left_stick_y;
         double turn = gamepad1.right_stick_x;
         double collect = gamepad2.left_trigger - gamepad2.right_trigger;
+        double wristPower = gamepad1.left_trigger - gamepad1.right_trigger;
 
         if(forward > 0)
             forward = Math.pow(forward, 2);
@@ -119,25 +123,26 @@ public class TeleOp5135_V4 extends OpMode
         left.setPower(Range.clip(forward - turn, -1, 1));
         right.setPower(Range.clip(forward + turn, -1, 1));
         collection.setPower(0.8*(Range.clip(collect, -1.0, 1.0)));
+        wrist.setPower(0.8*(Range.clip(wristPower, -1, 1)));
 
-        boolean wristUp = false;
-        if(gamepad1.a && !wristUp) //wrist up
-        {
-            wrist.setPosition(1);
-            wristUp = true;
-        }
-        else if(gamepad1.a && wristUp) //wrist down
-        {   wrist.setPosition(-1);
-            wristUp = false;
-        }
-        else if(gamepad1.left_trigger > 0 && wrist.getPosition() <= .95)
-        {
-            wrist.setPosition(wrist.getPosition() + 0.05);
-        }
-        else if(gamepad1.right_trigger > 0 && wrist.getPosition() >= -.95)
-        {
-            wrist.setPosition(wrist.getPosition() - 0.05);
-        }
+        //regular servo code
+//        if(gamepad1.x && !wristUp) //wrist up
+//        {
+//            wrist.setPosition(.9);
+//            wristUp = true;
+//        }
+//        else if(gamepad1.x && wristUp) //wrist down
+//        {   wrist.setPosition(-.9);
+//            wristUp = false;
+//        }
+//        else if(gamepad1.left_trigger > 0 && wrist.getPosition() <= .95)
+//        {
+//            wrist.setPosition(wrist.getPosition() + 0.005);
+//        }
+//        else if(gamepad1.right_trigger > 0 && wrist.getPosition() >= -.95)
+//        {
+//            wrist.setPosition(wrist.getPosition() - 0.005);
+//        }
 
         if(gamepad2.left_stick_y >0.2)
             lift.setPower(-1);
@@ -148,23 +153,24 @@ public class TeleOp5135_V4 extends OpMode
 
         telemetry.addData("bucket posiition", bucket.getPosition());
         telemetry.update();
-        boolean bucketUp = false;
+
         if(gamepad2.a && !bucketUp) //bucket dump
         {
             bucket.setPosition(1);
             bucketUp = true;
         }
-        else if(gamepad2.a && bucketUp) //bucket down
+        else if(gamepad2.b && bucketUp) //bucket down
         {
             bucket.setPosition(-1);
             bucketUp = false;
         }
-        if(gamepad2.b) //endgame
+
+        if(gamepad2.x) //endgame
             bucket.setPosition(0);
         if (gamepad2.dpad_up && bucket.getPosition() <= 0.95)
-            bucket.setPosition(bucket.getPosition() + .05);
+            bucket.setPosition(bucket.getPosition() + .005);
         else if (gamepad2.dpad_down && bucket.getPosition() >= -0.95)
-            bucket.setPosition(bucket.getPosition() - .05);
+            bucket.setPosition(bucket.getPosition() - .005);
 
 
         //Press to keep bucket up for endgame
