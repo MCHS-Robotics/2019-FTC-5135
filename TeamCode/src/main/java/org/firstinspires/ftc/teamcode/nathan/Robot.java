@@ -49,11 +49,7 @@ public class Robot {
     }
     /**
      * Raises the wrist
-     */
-    public void wristUp() {
-        wrist.setPosition(.75);
-    }
-
+     **/
     public void forward(float inches) {
         drive.forward(inches);
     }
@@ -74,9 +70,12 @@ public class Robot {
      * Lowers the wrist
      */
     public void wristDown() {
-        wrist.setPosition(0);
+        wrist.setPosition(-1);
     }
 
+    public void wristUp() {
+        wrist.setPosition(1);
+    }
     /**
      * Extends the front arm
      */
@@ -137,7 +136,7 @@ public class Robot {
 
     public void bucketDown()
     {
-        bucket.setPosition(0);
+        bucket.setPosition(-1);
     }
 
     public void bucketUp()

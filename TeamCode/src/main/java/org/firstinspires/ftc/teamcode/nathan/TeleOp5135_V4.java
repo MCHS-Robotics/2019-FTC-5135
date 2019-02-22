@@ -71,6 +71,9 @@ public class TeleOp5135_V4 extends OpMode
         telemetry.addData("right", right.getPower());
         //telemetry.addData("lift", lift.getPower());
         telemetry.addData("collection", collection.getPower());
+
+        wrist.setPosition(-1);
+        bucket.setPosition(1);
         //telemetry.addData("fBucket", fBucket.getPower());
         //Robot robot = new Robot(lift, extension, wrist, bucket, collection, drive);
     }
@@ -119,13 +122,13 @@ public class TeleOp5135_V4 extends OpMode
         collection.setPower(0.8*(Range.clip(collect, -1.0, 1.0)));
 
         boolean wristUp = false;
-        if(gamepad1.a && !wristUp) //wrist up/down
+        if(gamepad1.a && !wristUp) //wrist up
         {
-            wrist.setPosition(.75);
+            wrist.setPosition(1);
             wristUp = true;
         }
-        else if(gamepad1.a && wristUp)
-        {   wrist.setPosition(0);
+        else if(gamepad1.a && wristUp) //wrist down
+        {   wrist.setPosition(-1);
             wristUp = false;
         }
         else if(gamepad1.left_trigger > 0 && wrist.getPosition() <= .95)
@@ -147,17 +150,18 @@ public class TeleOp5135_V4 extends OpMode
         telemetry.addData("bucket posiition", bucket.getPosition());
         telemetry.update();
         boolean bucketUp = false;
-        if(gamepad2.a && !bucketUp) //bucket up/down
+        if(gamepad2.a && !bucketUp) //bucket up
         {
-            bucket.setPosition(.8);
+            bucket.setPosition(1);
             bucketUp = true;
         }
-        else if(gamepad2.a && bucketUp) {
-            bucket.setPosition(0);
+        else if(gamepad2.a && bucketUp) //bucket down
+        {
+            bucket.setPosition(-1);
             bucketUp = false;
         }
         if(gamepad2.b) //endgame
-            bucket.setPosition(.5);
+            bucket.setPosition(0);
         if (gamepad2.dpad_up && bucket.getPosition() <= 0.95)
             bucket.setPosition(bucket.getPosition() + .05);
         else if (gamepad2.dpad_down && bucket.getPosition() >= -0.95)
