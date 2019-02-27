@@ -8,12 +8,12 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class Robot {
     private DcMotor lift = null;
-    private Servo wrist = null;
+    private CRServo wrist = null;
     private CRServo collection = null;
     private Servo bucket = null;
     private DcMotor extension = null;
     private NormalDriveEncoders drive = null;
-    public Robot(DcMotor lift,  DcMotor extension, Servo wrist, Servo bucket,
+    public Robot(DcMotor lift,  DcMotor extension, CRServo wrist, Servo bucket,
                  CRServo collection, NormalDriveEncoders drive) {
         this.lift = lift;
         this.extension = extension;
@@ -70,13 +70,28 @@ public class Robot {
      * Lowers the wrist
      */
     public void wristDown() {
-        wrist.setPosition(-1);
+        wrist.setPower(.8);
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        wrist.setPower(0);
     }
 
-    public void wristUp() {
-        wrist.setPosition(1);
-    }
     /**
+     * Raises the wrist
+     */
+    public void wristUp() {
+        wrist.setPower(-.8);
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        wrist.setPower(0);
+
+    }    /**
      * Extends the front arm
      */
     public void extendOut()
