@@ -84,6 +84,7 @@ public class AutoCraterSideTwoMineralSamplingV5 extends LinearOpMode {
             tfod.activate();
         }
         while (!opModeIsActive()) {
+            hang();
             detect();
             telemetry.addData("POS", position.toString());
             telemetry.update();
@@ -179,6 +180,18 @@ public class AutoCraterSideTwoMineralSamplingV5 extends LinearOpMode {
             drive.backward(6);
         }
         telemetry.update();
+    }
+    private void hang()
+    {
+        telemetry.addData("Lift position", lift.getCurrentPosition());
+        telemetry.addData("time", getRuntime());
+        telemetry.update();
+        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        lift.setTargetPosition(0);
+        if(Math.abs(lift.getCurrentPosition()) > 10)
+            lift.setPower(.1);
+        else
+            lift.setPower(0);
     }
 
     private void initVuforia() {

@@ -123,7 +123,7 @@ public class TeleOp5135_V4 extends OpMode
         left.setPower(Range.clip(forward - turn, -1, 1));
         right.setPower(Range.clip(forward + turn, -1, 1));
         collection.setPower(0.8*(Range.clip(collect, -1.0, 1.0)));
-        wrist.setPower(0.8*(Range.clip(wristPower, -1, 1)));
+        wrist.setPower((Range.clip(wristPower, -1, 1)));
 
         //regular servo code
 //        if(gamepad1.x && !wristUp) //wrist up
@@ -167,10 +167,10 @@ public class TeleOp5135_V4 extends OpMode
 
         if(gamepad2.x) //endgame
             bucket.setPosition(0);
-        if (gamepad2.dpad_up && bucket.getPosition() <= 0.95)
-            bucket.setPosition(bucket.getPosition() + .005);
-        else if (gamepad2.dpad_down && bucket.getPosition() >= -0.95)
-            bucket.setPosition(bucket.getPosition() - .005);
+        if (gamepad2.dpad_up && bucket.getPosition() <= 0.9975)
+            bucket.setPosition(bucket.getPosition() + .0025);
+        else if (gamepad2.dpad_down && bucket.getPosition() >= -0.9975)
+            bucket.setPosition(bucket.getPosition() - .0025);
 
 
         //Press to keep bucket up for endgame
@@ -187,11 +187,11 @@ public class TeleOp5135_V4 extends OpMode
 
         if(gamepad1.right_bumper)
         {
-            extension.setPower(.9);
+            extension.setPower(1);
         }
         else if(gamepad1.left_bumper)
         {
-            extension.setPower(-.9);
+            extension.setPower(-1);
         }
         else extension.setPower(0);
 
