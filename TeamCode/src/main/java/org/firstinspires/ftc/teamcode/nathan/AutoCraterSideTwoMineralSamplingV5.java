@@ -25,7 +25,7 @@ public class AutoCraterSideTwoMineralSamplingV5 extends LinearOpMode {
     private DcMotor left = null;
     private DcMotor right = null;
     private DcMotor lift = null;
-    private Servo wrist = null;
+    private CRServo wrist = null;
     //private DcMotor fBucket = null;
     private CRServo collection = null;
     private Servo bucket = null;
@@ -54,7 +54,7 @@ public class AutoCraterSideTwoMineralSamplingV5 extends LinearOpMode {
         // step (using the FTC Robot Controller app on the phone).
         left = hardwareMap.get(DcMotor.class, "left");
         right = hardwareMap.get(DcMotor.class, "right");
-        wrist = hardwareMap.servo.get("wrist");
+        wrist = hardwareMap.crservo.get("wrist");
         extension = hardwareMap.get(DcMotor.class, "extension");
         lift = hardwareMap.get(DcMotor.class, "lift");
 
@@ -112,7 +112,7 @@ public class AutoCraterSideTwoMineralSamplingV5 extends LinearOpMode {
         robot.pivotLeft(45);
         robot.forward(50);
         //turn around and dump
-        robot.pivotLeft(180);
+        robot.pivotLeft( );
         robot.bucketUp();
         //go back to crater and park
         robot.forward(60);

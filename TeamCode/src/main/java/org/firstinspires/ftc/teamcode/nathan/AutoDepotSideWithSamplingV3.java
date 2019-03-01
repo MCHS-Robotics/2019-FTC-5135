@@ -33,11 +33,6 @@ public class AutoDepotSideWithSamplingV3 extends LinearOpMode {
     private DcMotor extension = null;
     //path 1 = left - path 2 = middle - path 3 = right
     private int path = -1;
-    private int goldMineralX = -1;
-    private int silverMineral1X = -1;
-    private int silverMineral2X = -1;
-    private boolean twoMinerals = false;
-    private boolean twoSilver = false;
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
@@ -117,25 +112,7 @@ public class AutoDepotSideWithSamplingV3 extends LinearOpMode {
         robot.wristUp();
         Sample(drive, robot);
 
-        /*switch(path){ //claim
-            case 1: //left
-                robot.forward(12);
-                robot.pivotLeft(90);
-                robot.backward(12);
-                break;
-            case 2: //middle
-                robot.pivotLeft(45);
-                robot.forward(12);
-                robot.pivotLeft(90);
-                break;
-            case 3: // right
-                robot.forward(12);
-                robot.pivotLeft(90);
-                robot.forward(36);
-                robot.pivotLeft(90);
-                robot.forward(12);
-                break;
-        }*/
+
         claim(robot);
 
         robot.bucketUp();
