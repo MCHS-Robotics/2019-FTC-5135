@@ -156,6 +156,6 @@ public class Robot {
 
     public void bucketUp()
     {
-        bucket.setPosition(1);
+        bucket.setPosition(0.2);
     }
 }

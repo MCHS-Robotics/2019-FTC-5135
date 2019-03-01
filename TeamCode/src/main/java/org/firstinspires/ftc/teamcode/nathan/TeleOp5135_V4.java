@@ -156,7 +156,7 @@ public class TeleOp5135_V4 extends OpMode
 
         if(gamepad2.a && !bucketUp) //bucket dump
         {
-            bucket.setPosition(1);
+            bucket.setPosition(0.5);
             bucketUp = true;
         }
         else if(gamepad2.b && bucketUp) //bucket down
