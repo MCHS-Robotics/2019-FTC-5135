@@ -101,7 +101,9 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
         lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.wristDown();
         robot.liftUp();
+        sleep(100);
         robot.forward(4);
+        sleep(100);
         Sample(robot);
         robot.extendOut();
         robot.liftDown();
@@ -147,21 +149,24 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
         if (position == Position.LEFT) {
             telemetry.addData("Gold Mineral Position", "Left");
             telemetry.update();
-            robot.pivotLeft(35);
+            robot.pivotLeft(25);
+            sleep(100);
             robot.forward(24);
+            sleep(100);
             robot.pivotRight(20);
-            robot.forward(6);
+
         } else if (position == Position.RIGHT) {
             telemetry.addData("Gold Mineral Position", "Right");
             telemetry.update();
-            robot.pivotRight(35);
+            robot.pivotRight(25);
+            sleep(100);
             robot.forward(24);
             robot.pivotLeft(20);
-            robot.forward(6);
         } else {
             telemetry.addData("Gold Mineral Position", "Center");
             telemetry.update();
-            robot.forward(18);
+            robot.forward(19);
+            sleep(100);
         }
         telemetry.update();
     }

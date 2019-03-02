@@ -99,21 +99,15 @@ public class AutoDepotSideV4 extends LinearOpMode {
         lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.wristDown();
         robot.liftUp();
+        sleep(100);
         robot.forward(4);
+        sleep(100);
         robot.liftDown();
+        sleep(100);
         robot.wristUp();
+        sleep(100);
         Sample(robot);
         sleep(100);
-        if(position == Position.LEFT) {
-            robot.forward(10);
-        }
-        else if(position == Position.RIGHT){
-
-        }
-        else{
-
-        }
-
     }
 
     private void detect() {
@@ -160,9 +154,7 @@ public class AutoDepotSideV4 extends LinearOpMode {
             sleep(100);
             robot.forward(24);
             sleep(100);
-            robot.backward(7);
-            sleep(100);
-
+            robot.backward(24);
         } else if (position == Position.RIGHT) {
             telemetry.addData("Gold Mineral Position", "Right");
             telemetry.update();
@@ -170,15 +162,13 @@ public class AutoDepotSideV4 extends LinearOpMode {
             sleep(100);
             robot.forward(24);
             sleep(100);
-            robot.backward(11);
-            sleep(100);
+            robot.backward(24);
         } else {
             telemetry.addData("Gold Mineral Position", "Center");
             telemetry.update();
             robot.forward(19);
             sleep(100);
-            robot.backward(7);
-            sleep(100);
+            robot.backward(19);
         }
         telemetry.update();
     }

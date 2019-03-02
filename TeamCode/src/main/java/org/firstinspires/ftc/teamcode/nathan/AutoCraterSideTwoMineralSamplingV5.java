@@ -99,9 +99,12 @@ public class AutoCraterSideTwoMineralSamplingV5 extends LinearOpMode {
         lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.wristDown();
         robot.liftUp();
+        sleep(100);
         robot.forward(4);
+        sleep(100);
         robot.liftDown();
         robot.wristUp();
+        sleep(100);
         Sample(robot);
         sleep(100);
         //drive towards wall
