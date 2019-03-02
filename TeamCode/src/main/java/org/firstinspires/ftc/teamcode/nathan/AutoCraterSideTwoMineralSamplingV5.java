@@ -100,6 +100,8 @@ public class AutoCraterSideTwoMineralSamplingV5 extends LinearOpMode {
         robot.wristDown();
         robot.liftUp();
         robot.forward(4);
+        robot.liftDown();
+        robot.wristUp();
         Sample(robot);
         robot.pivotLeft(65); //turn towards wall
         if(position == Position.RIGHT)
@@ -107,7 +109,7 @@ public class AutoCraterSideTwoMineralSamplingV5 extends LinearOpMode {
         else if(position == Position.LEFT)
             robot.forward(42);
         else
-            robot.forward(32);
+            robot.forward(46);
         //go toward depot
         robot.pivotLeft(25);
         robot.forward(25);
@@ -117,8 +119,8 @@ public class AutoCraterSideTwoMineralSamplingV5 extends LinearOpMode {
         //go back to crater and park
         robot.forward(55);
         robot.extendOut();
-        robot.liftDown();
         robot.bucketDown();
+        robot.wristDown();
     }
 
     private void detect() {
