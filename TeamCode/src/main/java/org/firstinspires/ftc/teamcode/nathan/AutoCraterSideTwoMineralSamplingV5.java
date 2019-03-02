@@ -66,7 +66,7 @@ public class AutoCraterSideTwoMineralSamplingV5 extends LinearOpMode {
         left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
+        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         extension.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         collection = hardwareMap.crservo.get("collection");
         //lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -76,8 +76,7 @@ public class AutoCraterSideTwoMineralSamplingV5 extends LinearOpMode {
         right.setDirection(DcMotor.Direction.FORWARD);
         //lift.setDirection(DcMotor.Direction.FORWARD);
         // fBucket.setDirection(DcMotor.Direction.FORWARD);
-        bucket.setPosition(-1);
-        NormalDriveEncoders drive = new NormalDriveEncoders(left, right, telemetry, .4f, this);
+        NormalDriveEncoders drive = new NormalDriveEncoders(left, right, telemetry, .45f, this);
         Robot robot = new Robot(lift, extension, wrist, bucket, collection, drive, this);
         if (tfod != null) {
             /** Activate Tensor Flow Object Detection. */
@@ -103,24 +102,24 @@ public class AutoCraterSideTwoMineralSamplingV5 extends LinearOpMode {
         robot.liftUp();
         robot.forward(4);
         Sample(drive, robot);
-        robot.pivotLeft(95); //turn towards wall
+        robot.pivotLeft(65); //turn towards wall
         if(position == Position.RIGHT)
             robot.forward(50);
         else if(position == Position.LEFT)
-            robot.forward(40);
+            robot.forward(42);
         else
-            robot.forward(28);
+            robot.forward(32);
         //go toward depot
-        robot.pivotLeft(35);
-        robot.forward(50);
+        robot.pivotLeft(40);
+        robot.forward(25);
         //turn around and dump
         robot.pivotLeft(180);
         robot.bucketUp();
-        robot.bucketDown();
         //go back to crater and park
-        robot.forward(60);
+        robot.forward(55);
         robot.extendOut();
         robot.liftDown();
+        robot.bucketDown();
     }
 
     private void detect() {

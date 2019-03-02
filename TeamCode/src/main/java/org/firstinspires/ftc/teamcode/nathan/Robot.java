@@ -87,7 +87,7 @@ public class Robot {
         if(opmode.opModeIsActive()) {
             wrist.setPower(.8);
             try {
-                Thread.sleep(500);
+                Thread.sleep(350);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -102,7 +102,7 @@ public class Robot {
         if(opmode.opModeIsActive()) {
             wrist.setPower(-.8);
             try {
-                Thread.sleep(500);
+                Thread.sleep(350);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -186,6 +186,13 @@ public class Robot {
     {
         if(opmode.opModeIsActive()) {
             bucket.setPosition(1);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+
         }
     }
 }

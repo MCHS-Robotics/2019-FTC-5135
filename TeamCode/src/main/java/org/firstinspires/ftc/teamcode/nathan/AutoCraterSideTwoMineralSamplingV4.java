@@ -66,6 +66,7 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
         left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lift.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         extension.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         collection = hardwareMap.crservo.get("collection");
