@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.nathan;
 
-import com.google.gson.typeadapters.PostConstructAdapterFactory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -15,7 +14,6 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
-import java.util.zip.GZIPOutputStream;
 
 /**
  * Created by student on 11/29/18.
@@ -30,7 +28,7 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
     private CRServo wrist = null;
     //private DcMotor fBucket = null;
     private CRServo collection = null;
-    private CRServo bucket = null;
+    private Servo bucket = null;
     private DcMotor extension = null;
     //path 1 = left - path 2 = middle - path 3 = right
     private Position position = Position.CENTER;
@@ -62,7 +60,7 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
 
 
         //lift = hardwareMap.get(DcMotor.class, "lift");
-        bucket = hardwareMap.crservo.get("bucket");
+        bucket = hardwareMap.servo.get("bucket");
         //fBucket = hardwareMap.get(DcMotor.class, "fBucket");
         //fBucket.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -78,14 +76,17 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
         right.setDirection(DcMotor.Direction.FORWARD);
         //lift.setDirection(DcMotor.Direction.FORWARD);
         // fBucket.setDirection(DcMotor.Direction.FORWARD);
-
-        NormalDriveEncoders drive = new NormalDriveEncoders(left, right, telemetry, .3f, this);
-        RobotCR robot = new RobotCR(lift, extension, wrist, bucket, collection, drive);
+        bucket.setPosition(-1);
+        NormalDriveEncoders drive = new NormalDriveEncoders(left, right, telemetry, .4f, this);
+        Robot robot = new Robot(lift, extension, wrist, bucket, collection, drive, this);
         if (tfod != null) {
             /** Activate Tensor Flow Object Detection. */
             tfod.activate();
         }
         while (!opModeIsActive()) {
+            telemetry.addData("Lift position", lift.getCurrentPosition());
+            telemetry.addData("time", getRuntime());
+            hang();
             detect();
             telemetry.addData("POS", position.toString());
             telemetry.update();
@@ -102,21 +103,6 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
         robot.liftUp();
         robot.forward(4);
         Sample(drive, robot);
-        robot.pivotLeft(90); //turn towards wall
-        if(position == Position.RIGHT)
-            robot.forward(54);
-        else if(position == Position.LEFT)
-            robot.forward(42);
-        else
-            robot.forward(30);
-        //go toward depot
-        robot.pivotLeft(45);
-        robot.forward(50);
-        //turn around and dump
-        robot.pivotLeft(180);
-        robot.bucketUp();
-        //go back to crater and park
-        robot.forward(60);
         robot.extendOut();
         robot.liftDown();
     }
@@ -157,7 +143,7 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
         }
     }
 
-    private void Sample(NormalDriveEncoders drive, RobotCR robot) {
+    private void Sample(NormalDriveEncoders drive, Robot robot) {
         if (position == Position.LEFT) {
             telemetry.addData("Gold Mineral Position", "Left");
             telemetry.update();
@@ -165,7 +151,6 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
             drive.forward(24);
             drive.pivotRight(20);
             drive.forward(6);
-            drive.backward(6);
         } else if (position == Position.RIGHT) {
             telemetry.addData("Gold Mineral Position", "Right");
             telemetry.update();
@@ -173,14 +158,23 @@ public class AutoCraterSideTwoMineralSamplingV4 extends LinearOpMode {
             drive.forward(24);
             drive.pivotLeft(20);
             drive.forward(6);
-            drive.backward(6);
         } else {
             telemetry.addData("Gold Mineral Position", "Center");
             telemetry.update();
             drive.forward(18);
-            drive.backward(6);
         }
         telemetry.update();
+    }
+    private void hang()
+    {
+
+        telemetry.update();
+        lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        lift.setTargetPosition(0);
+        if(Math.abs(lift.getCurrentPosition()) > 10)
+            lift.setPower(.1);
+        else
+            lift.setPower(0);
     }
 
     private void initVuforia() {

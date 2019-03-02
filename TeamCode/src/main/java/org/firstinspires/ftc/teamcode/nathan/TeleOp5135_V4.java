@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode.nathan;
+
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -7,10 +8,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name="TeleOp5135_V4", group="Iterative Opmode")
+@TeleOp(name = "TeleOp5135_V4", group = "Iterative Opmode")
 //@Disabled
-public class TeleOp5135_V4 extends OpMode
-{
+public class TeleOp5135_V4 extends OpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor left = null;
@@ -65,9 +65,9 @@ public class TeleOp5135_V4 extends OpMode
         left.setDirection(DcMotor.Direction.FORWARD);
         right.setDirection(DcMotor.Direction.REVERSE);
         //lift.setDirection(DcMotor.Direction.FORWARD);
-       // fBucket.setDirection(DcMotor.Direction.FORWARD);
-
-
+        // fBucket.setDirection(DcMotor.Direction.FORWARD);
+        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
         telemetry.addData("left", left.getPower());
@@ -100,19 +100,19 @@ public class TeleOp5135_V4 extends OpMode
     @Override
     public void loop() {
 
-        double forward =  gamepad1.left_stick_y;
+        double forward = gamepad1.left_stick_y;
         double turn = gamepad1.right_stick_x;
         double collect = gamepad2.left_trigger - gamepad2.right_trigger;
         double wristPower = gamepad1.left_trigger - gamepad1.right_trigger;
 
-        if(forward > 0)
+        if (forward > 0)
             forward = Math.pow(forward, 2);
-        else if(forward < 0)
+        else if (forward < 0)
             forward = -Math.pow(forward, 2);
 
-        if(turn > 0)
+        if (turn > 0)
             turn = Math.pow(turn, 2);
-        else if(turn < 0)
+        else if (turn < 0)
             turn = -Math.pow(turn, 2);
 //
 // else if(turn < 0)
@@ -121,7 +121,7 @@ public class TeleOp5135_V4 extends OpMode
         telemetry.addData("Turn Power", turn);
         left.setPower(Range.clip(forward - turn, -1, 1));
         right.setPower(Range.clip(forward + turn, -1, 1));
-        collection.setPower(0.8*(Range.clip(collect, -1.0, 1.0)));
+        collection.setPower(0.8 * (Range.clip(collect, -1.0, 1.0)));
         wrist.setPower((Range.clip(wristPower, -1, 1)));
 
         //regular servo code
@@ -142,26 +142,24 @@ public class TeleOp5135_V4 extends OpMode
 //        {
 //            wrist.setPosition(wrist.getPosition() - 0.005);
 //        }
-
-        if(gamepad2.left_stick_y >0.2)
-            lift.setPower(-1);
-        else if(gamepad2.left_stick_y<-0.2)
-            lift.setPower(1);
-        else
-            lift.setPower(0);
-
+        if (lift.getCurrentPosition() >= 0 || lift.getCurrentPosition() <= 3200) {
+            if (gamepad2.left_stick_y > 0.2)
+                lift.setPower(-1);
+            else if (gamepad2.left_stick_y < -0.2)
+                lift.setPower(1);
+            else
+                lift.setPower(0);
+        }
         telemetry.addData("bucket posiition", bucket.getPosition());
         telemetry.update();
 
-        if(gamepad2.a) //bucket dump
+        if (gamepad2.a) //bucket dump
         {
             bucket.setPosition(0.75);
-        }
-        else if(gamepad2.b) //bucket down
+        } else if (gamepad2.b) //bucket down
         {
             bucket.setPosition(0);
-        }
-        else if(gamepad2.x) //endgame
+        } else if (gamepad2.x) //endgame
             bucket.setPosition(0.4);
         if (gamepad2.dpad_up && bucket.getPosition() <= 0.9975)
             bucket.setPosition(bucket.getPosition() + .0025);
@@ -181,15 +179,11 @@ public class TeleOp5135_V4 extends OpMode
 //            bucketOverride = false;
 //        }
 
-        if(gamepad1.right_bumper)
-        {
+        if (gamepad1.right_bumper) {
             extension.setPower(1);
-        }
-        else if(gamepad1.left_bumper)
-        {
+        } else if (gamepad1.left_bumper) {
             extension.setPower(-1);
-        }
-        else extension.setPower(0);
+        } else extension.setPower(0);
 
         telemetry.update();
     }

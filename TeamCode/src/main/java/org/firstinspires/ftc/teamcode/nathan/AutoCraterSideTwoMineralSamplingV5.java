@@ -77,7 +77,7 @@ public class AutoCraterSideTwoMineralSamplingV5 extends LinearOpMode {
         //lift.setDirection(DcMotor.Direction.FORWARD);
         // fBucket.setDirection(DcMotor.Direction.FORWARD);
         bucket.setPosition(-1);
-        NormalDriveEncoders drive = new NormalDriveEncoders(left, right, telemetry, .6f, this);
+        NormalDriveEncoders drive = new NormalDriveEncoders(left, right, telemetry, .4f, this);
         Robot robot = new Robot(lift, extension, wrist, bucket, collection, drive, this);
         if (tfod != null) {
             /** Activate Tensor Flow Object Detection. */
@@ -103,13 +103,13 @@ public class AutoCraterSideTwoMineralSamplingV5 extends LinearOpMode {
         robot.liftUp();
         robot.forward(4);
         Sample(drive, robot);
-        robot.pivotLeft(90); //turn towards wall
+        robot.pivotLeft(95); //turn towards wall
         if(position == Position.RIGHT)
-            robot.forward(54);
+            robot.forward(50);
         else if(position == Position.LEFT)
-            robot.forward(42);
+            robot.forward(40);
         else
-            robot.forward(30);
+            robot.forward(28);
         //go toward depot
         robot.pivotLeft(35);
         robot.forward(50);
