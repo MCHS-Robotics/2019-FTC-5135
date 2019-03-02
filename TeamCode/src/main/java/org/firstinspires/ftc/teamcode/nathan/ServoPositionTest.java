@@ -7,9 +7,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name="TeleOp5135_V4", group="Iterative Opmode")
+@TeleOp(name="ServoPositiontest", group="Iterative Opmode")
 //@Disabled
-public class TeleOp5135_V4 extends OpMode
+public class ServoPositionTest extends OpMode
 {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
@@ -51,6 +51,7 @@ public class TeleOp5135_V4 extends OpMode
 
         //lift = hardwareMap.get(DcMotor.class, "lift");
         bucket = hardwareMap.servo.get("bucket");
+        bucket.setPosition(-1);
         //fBucket = hardwareMap.get(DcMotor.class, "fBucket");
         //fBucket.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -68,12 +69,6 @@ public class TeleOp5135_V4 extends OpMode
        // fBucket.setDirection(DcMotor.Direction.FORWARD);
 
 
-        // Tell the driver that initialization is complete.
-        telemetry.addData("Status", "Initialized");
-        telemetry.addData("left", left.getPower());
-        telemetry.addData("right", right.getPower());
-        //telemetry.addData("lift", lift.getPower());
-        telemetry.addData("collection", collection.getPower());
         //wrist.setPosition(-1);
         //telemetry.addData("fBucket", fBucket.getPower());
         //Robot robot = new Robot(lift, extension, wrist, bucket, collection, drive);
@@ -99,99 +94,17 @@ public class TeleOp5135_V4 extends OpMode
      */
     @Override
     public void loop() {
-
-        double forward =  gamepad1.left_stick_y;
-        double turn = gamepad1.right_stick_x;
-        double collect = gamepad2.left_trigger - gamepad2.right_trigger;
-        double wristPower = gamepad1.left_trigger - gamepad1.right_trigger;
-
-        if(forward > 0)
-            forward = Math.pow(forward, 2);
-        else if(forward < 0)
-            forward = -Math.pow(forward, 2);
-
-        if(turn > 0)
-            turn = Math.pow(turn, 2);
-        else if(turn < 0)
-            turn = -Math.pow(turn, 2);
-//
-// else if(turn < 0)
-//            turn = -Math.pow(turn, 2);
-        telemetry.addData("Forward Power", forward);
-        telemetry.addData("Turn Power", turn);
-        left.setPower(Range.clip(forward - turn, -1, 1));
-        right.setPower(Range.clip(forward + turn, -1, 1));
-        collection.setPower(0.8*(Range.clip(collect, -1.0, 1.0)));
-        wrist.setPower((Range.clip(wristPower, -1, 1)));
-
-        //regular servo code
-//        if(gamepad1.x && !wristUp) //wrist up
-//        {
-//            wrist.setPosition(.9);
-//            wristUp = true;
-//        }
-//        else if(gamepad1.x && wristUp) //wrist down
-//        {   wrist.setPosition(-.9);
-//            wristUp = false;
-//        }
-//        else if(gamepad1.left_trigger > 0 && wrist.getPosition() <= .95)
-//        {
-//            wrist.setPosition(wrist.getPosition() + 0.005);
-//        }
-//        else if(gamepad1.right_trigger > 0 && wrist.getPosition() >= -.95)
-//        {
-//            wrist.setPosition(wrist.getPosition() - 0.005);
-//        }
-
-        if(gamepad2.left_stick_y >0.2)
-            lift.setPower(-1);
-        else if(gamepad2.left_stick_y<-0.2)
-            lift.setPower(1);
-        else
-            lift.setPower(0);
-
-        telemetry.addData("bucket posiition", bucket.getPosition());
+        //bucket.setPosition(gamepad1.left_stick_y);
+        telemetry.addData("Bucket Position", bucket.getPosition());
         telemetry.update();
-
-        if(gamepad2.a) //bucket dump
+        if(gamepad1.a)
         {
-            bucket.setPosition(0.75);
+            bucket.setPosition(bucket.getPosition()+0.0025);
         }
-        else if(gamepad2.b) //bucket down
+        else if(gamepad1.b)
         {
-            bucket.setPosition(0);
+            bucket.setPosition(bucket.getPosition()-0.0025);
         }
-        else if(gamepad2.x) //endgame
-            bucket.setPosition(0.4);
-        if (gamepad2.dpad_up && bucket.getPosition() <= 0.9975)
-            bucket.setPosition(bucket.getPosition() + .0025);
-        else if (gamepad2.dpad_down && bucket.getPosition() >= -0.9975)
-            bucket.setPosition(bucket.getPosition() - .0025);
-
-
-        //Press to keep bucket up for endgame
-        //NOTE: D-Pad will not work unless gamepad2 B is pressed to end the override
-//        if(gamepad2.a && bucketOverride == false) {
-//            bucket.setPower(-.4);
-//            bucketOverride = true;
-//        }
-//        else if (gamepad2.a && bucketOverride == true)
-//        {
-//            bucket.setPower(0);
-//            bucketOverride = false;
-//        }
-
-        if(gamepad1.right_bumper)
-        {
-            extension.setPower(1);
-        }
-        else if(gamepad1.left_bumper)
-        {
-            extension.setPower(-1);
-        }
-        else extension.setPower(0);
-
-        telemetry.update();
     }
 
     /*;

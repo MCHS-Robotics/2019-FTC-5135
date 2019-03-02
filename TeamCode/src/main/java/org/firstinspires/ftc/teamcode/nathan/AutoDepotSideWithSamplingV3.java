@@ -84,7 +84,7 @@ public class AutoDepotSideWithSamplingV3 extends LinearOpMode {
         // fBucket.setDirection(DcMotor.Direction.FORWARD);
 
         NormalDriveEncoders drive = new NormalDriveEncoders(left, right, telemetry, .3f, this);
-        Robot robot = new Robot(lift, extension, wrist, bucket, collection, drive);
+        Robot robot = new Robot(lift, extension, wrist, bucket, collection, drive,this);
 
         if (tfod != null) {
             /** Activate Tensor Flow Object Detection. */

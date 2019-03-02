@@ -76,14 +76,16 @@ public class AutoCraterSideTwoMineralSamplingV5 extends LinearOpMode {
         right.setDirection(DcMotor.Direction.FORWARD);
         //lift.setDirection(DcMotor.Direction.FORWARD);
         // fBucket.setDirection(DcMotor.Direction.FORWARD);
-
-        NormalDriveEncoders drive = new NormalDriveEncoders(left, right, telemetry, .3f, this);
-        Robot robot = new Robot(lift, extension, wrist, bucket, collection, drive);
+        bucket.setPosition(-1);
+        NormalDriveEncoders drive = new NormalDriveEncoders(left, right, telemetry, .6f, this);
+        Robot robot = new Robot(lift, extension, wrist, bucket, collection, drive, this);
         if (tfod != null) {
             /** Activate Tensor Flow Object Detection. */
             tfod.activate();
         }
         while (!opModeIsActive()) {
+            telemetry.addData("Lift position", lift.getCurrentPosition());
+            telemetry.addData("time", getRuntime());
             hang();
             detect();
             telemetry.addData("POS", position.toString());
@@ -109,11 +111,12 @@ public class AutoCraterSideTwoMineralSamplingV5 extends LinearOpMode {
         else
             robot.forward(30);
         //go toward depot
-        robot.pivotLeft(45);
+        robot.pivotLeft(35);
         robot.forward(50);
         //turn around and dump
         robot.pivotLeft(180);
         robot.bucketUp();
+        robot.bucketDown();
         //go back to crater and park
         robot.forward(60);
         robot.extendOut();
@@ -183,8 +186,7 @@ public class AutoCraterSideTwoMineralSamplingV5 extends LinearOpMode {
     }
     private void hang()
     {
-        telemetry.addData("Lift position", lift.getCurrentPosition());
-        telemetry.addData("time", getRuntime());
+
         telemetry.update();
         lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         lift.setTargetPosition(0);

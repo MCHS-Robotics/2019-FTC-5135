@@ -66,11 +66,10 @@ public class NormalDriveEncoders {
     {
         double arc = Math.PI * turnRadius * degrees / 360f;
         int pos = -(int)((encoder * arc)/(4 * Math.PI));
-
-        left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         left.setTargetPosition(pos);
         right.setTargetPosition(-pos);
         left.setPower(power);

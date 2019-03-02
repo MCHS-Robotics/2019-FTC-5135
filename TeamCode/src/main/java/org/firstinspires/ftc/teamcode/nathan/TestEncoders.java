@@ -41,6 +41,8 @@ import com.qualcomm.robotcore.util.Range;
 
                 left = hardwareMap.get(DcMotor.class, "left");
                 right = hardwareMap.get(DcMotor.class, "right");
+                left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 left.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
