@@ -115,12 +115,12 @@ public class AutoCraterSideTwoMineralSamplingV5 extends LinearOpMode {
         robot.forward(25);
         //turn around and dump
         robot.pivotLeft(180);
+        robot.wristDown();
         robot.bucketUp();
         //go back to crater and park
         robot.forward(55);
         robot.extendOut();
         robot.bucketDown();
-        robot.wristDown();
     }
 
     private void detect() {
