@@ -83,8 +83,7 @@ public class AutoDepotSideWithSamplingV3 extends LinearOpMode {
         //lift.setDirection(DcMotor.Direction.FORWARD);
         // fBucket.setDirection(DcMotor.Direction.FORWARD);
 
-        NormalDriveEncoders drive = new NormalDriveEncoders(left, right, telemetry, .3f, this);
-        Robot robot = new Robot(lift, extension, wrist, bucket, collection, drive,this);
+        Robot robot = new Robot(left, right, .45f, lift, extension, wrist, bucket, collection, this, telemetry);
 
         if (tfod != null) {
             /** Activate Tensor Flow Object Detection. */
@@ -107,10 +106,10 @@ public class AutoDepotSideWithSamplingV3 extends LinearOpMode {
 
         robot.wristDown();
         robot.liftUp();
-        drive.forward(2);
+        robot.forward(2);
         //robot.liftDown()
         robot.wristUp();
-        Sample(drive, robot);
+        Sample(robot);
 
 
         claim(robot);
@@ -174,26 +173,26 @@ public class AutoDepotSideWithSamplingV3 extends LinearOpMode {
         }
     }
 
-    private void Sample(NormalDriveEncoders drive, Robot robot) {
+    private void Sample(Robot robot) {
         if (position == Position.LEFT) {
             telemetry.addData("Gold Mineral Position", "Left");
             telemetry.update();
-            drive.pivotLeft(35);
-            drive.forward(24);
-            drive.pivotLeft(10);
+            robot.pivotLeft(35);
+            robot.forward(24);
+            robot.pivotLeft(10);
             path = 1;
         } else if (position == Position.RIGHT) {
             telemetry.addData("Gold Mineral Position", "Right");
             telemetry.update();
-            drive.pivotRight(35);
-            drive.forward(24);
+            robot.pivotRight(35);
+            robot.forward(24);
             //robot.collectIn(10);
-            drive.pivotRight(10);
+            robot.pivotRight(10);
             path = 3;
         } else {
             telemetry.addData("Gold Mineral Position", "Center");
             telemetry.update();
-            drive.forward(44);
+            robot.forward(44);
             path = 2;
         }
         telemetry.update();

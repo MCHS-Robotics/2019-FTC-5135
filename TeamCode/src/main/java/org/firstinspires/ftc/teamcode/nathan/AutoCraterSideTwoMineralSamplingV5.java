@@ -76,8 +76,7 @@ public class AutoCraterSideTwoMineralSamplingV5 extends LinearOpMode {
         right.setDirection(DcMotor.Direction.FORWARD);
         //lift.setDirection(DcMotor.Direction.FORWARD);
         // fBucket.setDirection(DcMotor.Direction.FORWARD);
-        NormalDriveEncoders drive = new NormalDriveEncoders(left, right, telemetry, .45f, this);
-        Robot robot = new Robot(lift, extension, wrist, bucket, collection, drive, this);
+        Robot robot = new Robot(left, right, .45f, lift, extension, wrist, bucket, collection, this, telemetry);
         if (tfod != null) {
             /** Activate Tensor Flow Object Detection. */
             tfod.activate();
@@ -101,7 +100,7 @@ public class AutoCraterSideTwoMineralSamplingV5 extends LinearOpMode {
         robot.wristDown();
         robot.liftUp();
         robot.forward(4);
-        Sample(drive, robot);
+        Sample(robot);
         robot.pivotLeft(65); //turn towards wall
         if(position == Position.RIGHT)
             robot.forward(50);
@@ -110,7 +109,7 @@ public class AutoCraterSideTwoMineralSamplingV5 extends LinearOpMode {
         else
             robot.forward(32);
         //go toward depot
-        robot.pivotLeft(40);
+        robot.pivotLeft(25);
         robot.forward(25);
         //turn around and dump
         robot.pivotLeft(180);
@@ -158,28 +157,28 @@ public class AutoCraterSideTwoMineralSamplingV5 extends LinearOpMode {
         }
     }
 
-    private void Sample(NormalDriveEncoders drive, Robot robot) {
+    private void Sample(Robot robot) {
         if (position == Position.LEFT) {
             telemetry.addData("Gold Mineral Position", "Left");
             telemetry.update();
-            drive.pivotLeft(35);
-            drive.forward(24);
-            drive.pivotRight(20);
-            drive.forward(6);
-            drive.backward(6);
+            robot.pivotLeft(35);
+            robot.forward(24);
+            robot.pivotRight(20);
+            robot.forward(6);
+            robot.backward(6);
         } else if (position == Position.RIGHT) {
             telemetry.addData("Gold Mineral Position", "Right");
             telemetry.update();
-            drive.pivotRight(35);
-            drive.forward(24);
-            drive.pivotLeft(20);
-            drive.forward(6);
-            drive.backward(6);
+            robot.pivotRight(35);
+            robot.forward(24);
+            robot.pivotLeft(20);
+            robot.forward(6);
+            robot.backward(6);
         } else {
             telemetry.addData("Gold Mineral Position", "Center");
             telemetry.update();
-            drive.forward(18);
-            drive.backward(6);
+            robot.forward(18);
+            robot.backward(6);
         }
         telemetry.update();
     }
@@ -188,11 +187,8 @@ public class AutoCraterSideTwoMineralSamplingV5 extends LinearOpMode {
 
         telemetry.update();
         lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        lift.setPower(.1);
         lift.setTargetPosition(0);
-        if(Math.abs(lift.getCurrentPosition()) > 10)
-            lift.setPower(.1);
-        else
-            lift.setPower(0);
     }
 
     private void initVuforia() {
