@@ -18,9 +18,9 @@ import java.util.List;
 /**
  * Created by student on 11/29/18.
  */
-@Autonomous(name = "AutoCraterSideTwoMineralSamplingV5")
+@Autonomous(name = "AutoDepotSideV4")
 // @Disabled
-public class AutoCraterSideTwoMineralSamplingV5 extends LinearOpMode {
+public class AutoDepotSideV4 extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor left = null;
     private DcMotor right = null;
@@ -104,31 +104,16 @@ public class AutoCraterSideTwoMineralSamplingV5 extends LinearOpMode {
         robot.wristUp();
         Sample(robot);
         sleep(100);
-        //drive towards wall
-        if(position == Position.RIGHT)
-            robot.forward(44f);
-        else if(position == Position.LEFT)
-            robot.forward(26);
-        else
-            robot.forward(34f);
-        sleep(100);
-        robot.pivotLeft(43);
-        sleep(100);
-        //drive towards depot
-        robot.forward(55);
-        sleep(100);
-        // turn around and dump
-        robot.pivotLeft(140);
-        sleep(100);
-        robot.wristDown();
-        sleep(100);
-        robot.bucketUp();
-        sleep(400);
-        robot.pivotLeft(38);
-        sleep(100);
-        robot.bucketDown();
-        robot.forward(56);
-        robot.extendOut();
+        if(position == Position.LEFT) {
+            robot.forward(10);
+        }
+        else if(position == Position.RIGHT){
+
+        }
+        else{
+
+        }
+
     }
 
     private void detect() {
@@ -177,7 +162,6 @@ public class AutoCraterSideTwoMineralSamplingV5 extends LinearOpMode {
             sleep(100);
             robot.backward(7);
             sleep(100);
-            robot.pivotLeft(40); //turn towards wall
 
         } else if (position == Position.RIGHT) {
             telemetry.addData("Gold Mineral Position", "Right");
@@ -188,7 +172,6 @@ public class AutoCraterSideTwoMineralSamplingV5 extends LinearOpMode {
             sleep(100);
             robot.backward(11);
             sleep(100);
-            robot.pivotLeft(95);
         } else {
             telemetry.addData("Gold Mineral Position", "Center");
             telemetry.update();
@@ -196,7 +179,6 @@ public class AutoCraterSideTwoMineralSamplingV5 extends LinearOpMode {
             sleep(100);
             robot.backward(7);
             sleep(100);
-            robot.pivotLeft(60);
         }
         telemetry.update();
     }

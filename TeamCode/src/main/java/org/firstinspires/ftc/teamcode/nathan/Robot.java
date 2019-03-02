@@ -100,6 +100,7 @@ public class Robot {
         if (opmode.opModeIsActive()) {
             forward(-inches);
         }
+
     }
 
     public void pivotLeft(float degrees) {
@@ -138,7 +139,7 @@ public class Robot {
 
     public void pivotRight(float degrees) {
         if (opmode.opModeIsActive()) {
-            pivotRight(-degrees);
+            pivotLeft(-degrees);
         }
     }
 
@@ -149,7 +150,7 @@ public class Robot {
         if (opmode.opModeIsActive()) {
             wrist.setPower(.8);
             try {
-                Thread.sleep(350);
+                Thread.sleep(450);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -164,7 +165,7 @@ public class Robot {
         if (opmode.opModeIsActive()) {
             wrist.setPower(-.8);
             try {
-                Thread.sleep(350);
+                Thread.sleep(450);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -239,7 +240,7 @@ public class Robot {
     public void bucketDown() {
         if (opmode.opModeIsActive()) {
 
-            bucket.setPosition(-1);
+            bucket.setPosition(0);
         }
     }
 
