@@ -81,7 +81,7 @@ public class AutoCraterSideTwoMineralSamplingV5 extends LinearOpMode {
             /** Activate Tensor Flow Object Detection. */
             tfod.activate();
         }
-        while (!opModeIsActive()) {
+        while (!opModeIsActive() &&  !isStopRequested()) {
             telemetry.addData("Lift position", lift.getCurrentPosition());
             telemetry.addData("time", getRuntime());
             hang();

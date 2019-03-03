@@ -24,7 +24,7 @@ public class TeleOp5135_V4 extends OpMode {
     private DcMotor extension = null;
     boolean bucketUp = false;
     boolean wristUp = false;
-
+    boolean liftOverride = false;
     /* extension gamepad 1
     wrist on triggers return double
     extension on bumpers
@@ -98,7 +98,7 @@ public class TeleOp5135_V4 extends OpMode {
      * Code to run REPEATEDLY after the driver hits PLAY but before they hit STOP
      */
     @Override
-    public void loop() {
+    public void loop() {  
 
         double forward = gamepad1.left_stick_y;
         double turn = gamepad1.right_stick_x;
@@ -142,13 +142,24 @@ public class TeleOp5135_V4 extends OpMode {
 //        {
 //            wrist.setPosition(wrist.getPosition() - 0.005);
 //        }
-        if (lift.getCurrentPosition() >= 0 || lift.getCurrentPosition() <= 3200) {
+
+        if (lift.getCurrentPosition() >= 0 || lift.getCurrentPosition() <= 3200 || liftOverride){
             if (gamepad2.left_stick_y > 0.2)
                 lift.setPower(-1);
             else if (gamepad2.left_stick_y < -0.2)
                 lift.setPower(1);
             else
                 lift.setPower(0);
+        }
+        if(gamepad2.right_bumper && gamepad2.y)
+        {
+            liftOverride = true;
+        }
+        else if(liftOverride == true)
+        {
+            lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            liftOverride = false;
         }
         telemetry.addData("bucket posiition", bucket.getPosition());
         telemetry.update();
